@@ -1,0 +1,463 @@
+/* Estilos customizados para o jogo Naruto */
+
+/* Animações */
+@keyframes fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fade-in-delay {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse-glow {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(251, 146, 60, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 30px rgba(251, 146, 60, 0.6);
+    }
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+/* Classes de animação */
+.animate-fade-in {
+    animation: fade-in 1s ease-out;
+}
+
+.animate-fade-in-delay {
+    animation: fade-in-delay 1s ease-out 0.3s both;
+}
+
+.animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.animate-float {
+    animation: float 3s ease-in-out infinite;
+}
+
+/* Tema Naruto (Padrão) */
+.naruto-theme {
+    background: linear-gradient(135deg, #ff6b35, #f7931e, #ffb347, #4a90e2);
+}
+
+.naruto-theme .header-bg {
+    background: rgba(255, 107, 53, 0.95);
+    border-color: rgba(255, 179, 71, 0.8);
+}
+
+.naruto-theme .glass-card {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 179, 71, 0.3);
+    box-shadow: 0 8px 32px rgba(255, 107, 53, 0.2);
+}
+
+/* Tema Akatsuki (Escuro) */
+.akatsuki-theme {
+    background: linear-gradient(135deg, #1a0000, #330000, #660000, #000000);
+}
+
+.akatsuki-theme .header-bg {
+    background: rgba(204, 0, 0, 0.2);
+    border-color: rgba(255, 0, 0, 0.3);
+}
+
+.akatsuki-theme .glass-card {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(204, 0, 0, 0.4);
+    box-shadow: 0 8px 32px rgba(204, 0, 0, 0.3);
+}
+
+.akatsuki-theme .text-primary {
+    color: #ff4444 !important;
+}
+
+.akatsuki-theme .text-secondary {
+    color: #cc0000 !important;
+}
+
+/* Tema Dark (Preto e Branco) */
+.dark-theme {
+    background: #111 !important;
+    color: #fff !important;
+}
+
+.dark-theme .header-bg {
+    background: #000 !important;
+    border-color: #fff !important;
+}
+
+.dark-theme .glass-card {
+    background: rgba(30, 30, 30, 0.85) !important;
+    border: 1px solid #fff !important;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5) !important;
+}
+
+.dark-theme .text-primary,
+.dark-theme .text-secondary,
+.dark-theme .nav-link,
+.dark-theme .nav-link.active {
+    color: #fff !important;
+}
+
+.dark-theme input,
+.dark-theme select,
+.dark-theme textarea {
+    background: #222 !important;
+    color: #fff !important;
+    border-color: #fff !important;
+}
+
+.dark-theme .skill-bar {
+    background: #333 !important;
+}
+
+.dark-theme .modal-backdrop {
+    backdrop-filter: blur(5px) brightness(0.7);
+}
+
+/* Efeitos de glassmorphism aprimorados */
+.glass-effect {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Efeitos hover para NPCs */
+.npc-card {
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Card Sasuke Uchiha: vermelho e preto */
+.npc-card[data-npc="sasuke"] {
+    background: linear-gradient(135deg, #1a0000 60%, #ff0000 100%);
+    border: 2px solid #ff0000;
+    box-shadow: 0 8px 32px rgba(255,0,0,0.25);
+}
+
+/* Card Sakura Haruno: rosa e branco */
+.npc-card[data-npc="sakura"] {
+    background: linear-gradient(135deg, #fff 60%, #ec4899 100%);
+    border: 2px solid #ec4899;
+    box-shadow: 0 8px 32px rgba(236,72,153,0.25);
+    color: #b1005a !important;
+}
+.npc-card[data-npc="sakura"] h3,
+.npc-card[data-npc="sakura"] p,
+.npc-card[data-npc="sakura"] .text-white,
+.npc-card[data-npc="sakura"] .text-blue-100 {
+    color: #b1005a !important;
+}
+
+/* Card Kakashi Hatake: cinza e azul escuro */
+.npc-card[data-npc="kakashi"] {
+    background: linear-gradient(135deg, #f3f4f6 60%, #1e3a8a 100%);
+    border: 2px solid #1e3a8a;
+    box-shadow: 0 8px 32px rgba(30,58,138,0.25);
+    color: #1e3a8a !important;
+}
+.npc-card[data-npc="kakashi"] h3,
+.npc-card[data-npc="kakashi"] p,
+.npc-card[data-npc="kakashi"] .text-white,
+.npc-card[data-npc="kakashi"] .text-blue-100 {
+    color: #1e3a8a !important;
+}
+
+.npc-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.5s;
+}
+
+.npc-card:hover::before {
+    left: 100%;
+}
+
+.npc-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Estilo para links de navegação ativos */
+.nav-link.active {
+    color: #fb923c;
+    position: relative;
+}
+
+/* Corrige fundo do menu da vila no header */
+.naruto-theme header ul.bg-white\/10 {
+    background: #ff6b35 !important;
+    backdrop-filter: none !important;
+}
+.naruto-theme header ul.backdrop-blur-sm {
+    background: #ff6b35 !important;
+    backdrop-filter: none !important;
+}
+
+.nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: #fb923c;
+    border-radius: 1px;
+}
+
+/* Efeitos de transição suaves */
+.section {
+    transition: all 0.5s ease-in-out;
+}
+
+.section.hidden {
+    opacity: 0;
+    transform: translateX(20px);
+    pointer-events: none;
+}
+
+.section.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: all;
+}
+
+/* Estilo para barras de progresso */
+.skill-bar {
+    position: relative;
+    overflow: hidden;
+}
+
+.skill-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+/* Efeitos para inputs */
+input:focus, select:focus {
+    box-shadow: 0 0 0 3px rgba(251, 146, 60, 0.3);
+}
+
+/* Estilo para botões */
+button {
+    position: relative;
+    overflow: hidden;
+}
+
+button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s, height 0.3s;
+}
+
+button:active::before {
+    width: 300px;
+    height: 300px;
+}
+
+/* Efeitos de partículas (simulado com CSS) */
+.particle-effect {
+    position: relative;
+}
+
+.particle-effect::before,
+.particle-effect::after {
+    content: '✨';
+    position: absolute;
+    font-size: 12px;
+    color: #fbbf24;
+    animation: particle-float 3s ease-in-out infinite;
+    pointer-events: none;
+}
+
+.particle-effect::before {
+    top: 10%;
+    left: 10%;
+    animation-delay: 0s;
+}
+
+.particle-effect::after {
+    top: 20%;
+    right: 10%;
+    animation-delay: 1.5s;
+}
+
+@keyframes particle-float {
+    0%, 100% {
+        opacity: 0;
+        transform: translateY(0px) rotate(0deg);
+    }
+    50% {
+        opacity: 1;
+        transform: translateY(-20px) rotate(180deg);
+    }
+}
+
+/* Responsividade aprimorada */
+@media (max-width: 768px) {
+    .npc-card {
+        transform: none;
+    }
+    
+    .npc-card:hover {
+        transform: translateY(-2px) scale(1.01);
+    }
+    
+    .animate-fade-in,
+    .animate-fade-in-delay {
+        animation-duration: 0.5s;
+    }
+}
+
+/* Estilo para scrollbar personalizada */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(251, 146, 60, 0.5);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(251, 146, 60, 0.7);
+}
+
+/* Efeito de loading */
+.loading {
+    position: relative;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid transparent;
+    border-top: 2px solid #fb923c;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Efeitos especiais para elementos ninja */
+.ninja-shadow {
+    box-shadow: 
+        0 4px 8px rgba(0, 0, 0, 0.3),
+        0 8px 16px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.chakra-glow {
+    box-shadow: 
+        0 0 10px rgba(59, 130, 246, 0.5),
+        0 0 20px rgba(59, 130, 246, 0.3),
+        0 0 30px rgba(59, 130, 246, 0.1);
+}
+
+/* Transições suaves para mudança de tema */
+* {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Estilo para modal */
+.modal-backdrop {
+    backdrop-filter: blur(5px);
+}
+
+/* Efeitos de hover para elementos interativos */
+.interactive-element {
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.interactive-element:hover {
+    filter: brightness(1.1);
+}
+
+/* Estilo para badges/tags */
+.ninja-badge {
+    position: relative;
+    overflow: hidden;
+}
+
+.ninja-badge::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transition: left 0.5s;
+}
+
+.ninja-badge:hover::before {
+    left: 100%;
+}

@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vila da Folha - Jogo Naruto</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="naruto-theme min-h-screen transition-all duration-500" id="body">
+    <!-- Header Fixo -->
+    <header class="fixed top-0 w-full header-bg backdrop-blur-md border-b border-white/20 z-50">
+        <nav class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-gradient-to-r from-orange-400 to-orange-600 rounded-full flex items-center justify-center shadow-lg">
+                    <i class="fas fa-fire text-white text-lg"></i>
+                </div>
+                <h1 class="text-white font-bold text-xl tracking-wide">Vila da Folha</h1>
+            </div>
+            
+            <!-- Navegação Desktop Moderna -->
+            <ul class="hidden md:flex space-x-2 bg-white/10 backdrop-blur-sm rounded-full px-2 py-2">
+                <li>
+                    <a href="#vila" class="nav-link active px-6 py-2 rounded-full text-white font-medium transition-all duration-300 hover:bg-white/20 flex items-center space-x-2">
+                        <i class="fas fa-home"></i>
+                        <span>Vila</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#perfil" class="nav-link px-6 py-2 rounded-full text-white/80 font-medium transition-all duration-300 hover:bg-white/20 hover:text-white flex items-center space-x-2">
+                        <i class="fas fa-user-ninja"></i>
+                        <span>Perfil</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#creditos" class="nav-link px-6 py-2 rounded-full text-white/80 font-medium transition-all duration-300 hover:bg-white/20 hover:text-white flex items-center space-x-2">
+                        <i class="fas fa-scroll"></i>
+                        <span>Créditos</span>
+                    </a>
+                </li>
+            </ul>
+            
+            <div class="flex items-center space-x-4">
+                <button id="themeToggle" class="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/20 transition-all duration-300 shadow-lg">
+                    <i class="fas fa-palette" id="themeIcon"></i>
+                </button>
+                <button class="md:hidden w-10 h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/20 transition-all duration-300" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </nav>
+        
+        <!-- Menu Mobile -->
+        <div class="md:hidden bg-black/30 backdrop-blur-md hidden" id="mobileMenu">
+            <div class="px-4 py-2 space-y-2">
+                <a href="#vila" class="block text-white hover:text-orange-400 py-2 nav-link">Vila</a>
+                <a href="#perfil" class="block text-white hover:text-orange-400 py-2 nav-link">Perfil</a>
+                <a href="#creditos" class="block text-white hover:text-orange-400 py-2 nav-link">Créditos</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main class="pt-20">
+        <!-- Seção Vila -->
+        <section id="vila" class="min-h-screen flex flex-col justify-center items-center px-4 section active">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl md:text-6xl font-bold text-white mb-4 animate-fade-in">
+                    Bem-vindo à Vila da Folha
+                </h2>
+                <p class="text-xl text-blue-100 max-w-2xl mx-auto animate-fade-in-delay">
+                    Explore o mundo ninja e interaja com seus personagens favoritos
+                </p>
+            </div>
+
+            <!-- NPCs Interativos -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+                <!-- Naruto -->
+                <div class="npc-card bg-white/10 backdrop-blur-md rounded-xl p-6 text-center hover:bg-white/20 transition-all cursor-pointer transform hover:scale-105" data-npc="naruto">
+                    <div class="w-20 h-20 bg-orange-500 rounded-full mx-auto mb-4 flex items-center justify-center text-3xl">
+                        🍜
+                    </div>
+                    <h3 class="text-white font-bold text-xl mb-2">Naruto Uzumaki</h3>
+                    <p class="text-blue-100 text-sm">O ninja que nunca desiste!</p>
+                    <div class="mt-4">
+                        <span class="bg-orange-500 text-white px-3 py-1 rounded-full text-xs">Hokage</span>
+                    </div>
+                </div>
+
+                <!-- Sasuke -->
+                <div class="npc-card bg-white/10 backdrop-blur-md rounded-xl p-6 text-center hover:bg-white/20 transition-all cursor-pointer transform hover:scale-105" data-npc="sasuke">
+<div class="w-20 h-20 bg-black rounded-full mx-auto mb-4 flex items-center justify-center text-3xl">
+                        ⚡
+                    </div>
+                    <h3 class="text-white font-bold text-xl mb-2">Sasuke Uchiha</h3>
+                    <p class="text-blue-100 text-sm">O último dos Uchiha</p>
+                    <div class="mt-4">
+<span class="bg-red-600 text-white px-3 py-1 rounded-full text-xs">Rinnegan</span>
+                    </div>
+                </div>
+
+                <!-- Sakura -->
+                <div class="npc-card bg-white/10 backdrop-blur-md rounded-xl p-6 text-center hover:bg-white/20 transition-all cursor-pointer transform hover:scale-105" data-npc="sakura">
+                    <div class="w-20 h-20 bg-pink-500 rounded-full mx-auto mb-4 flex items-center justify-center text-3xl">
+                        🌸
+                    </div>
+                    <h3 class="text-white font-bold text-xl mb-2">Sakura Haruno</h3>
+                    <p class="text-blue-100 text-sm">Ninja médica poderosa</p>
+                    <div class="mt-4">
+                        <span class="bg-pink-500 text-white px-3 py-1 rounded-full text-xs">Médica</span>
+                    </div>
+                </div>
+
+                <!-- Kakashi -->
+                <div class="npc-card bg-white/10 backdrop-blur-md rounded-xl p-6 text-center hover:bg-white/20 transition-all cursor-pointer transform hover:scale-105" data-npc="kakashi">
+                    <div class="w-20 h-20 bg-gray-600 rounded-full mx-auto mb-4 flex items-center justify-center text-3xl">
+                        👁️
+                    </div>
+                    <h3 class="text-white font-bold text-xl mb-2">Kakashi Hatake</h3>
+                    <p class="text-blue-100 text-sm">O ninja copiador</p>
+                    <div class="mt-4">
+                        <span class="bg-gray-600 text-white px-3 py-1 rounded-full text-xs">Sensei</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Status do Jogador -->
+            <div class="mt-12 bg-white/10 backdrop-blur-md rounded-xl p-6 max-w-md mx-auto">
+                <h3 class="text-white font-bold text-lg mb-4 text-center">Seu Status</h3>
+                <div class="space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span class="text-blue-100">Nível:</span>
+                        <span class="text-white font-bold" id="playerLevel">1</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-blue-100">XP:</span>
+                        <span class="text-white font-bold" id="playerXP">0/100</span>
+                    </div>
+                    <div class="w-full bg-gray-700 rounded-full h-2">
+                        <div class="bg-orange-500 h-2 rounded-full transition-all duration-300" style="width: 0%" id="xpBar"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção Perfil -->
+        <section id="perfil" class="min-h-screen flex flex-col justify-center items-center px-4 section hidden">
+            <div class="max-w-4xl mx-auto w-full">
+                <h2 class="text-4xl font-bold text-white mb-8 text-center">Perfil do Ninja</h2>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Informações do Personagem -->
+                    <div class="bg-white/10 backdrop-blur-md rounded-xl p-6">
+                        <h3 class="text-white font-bold text-xl mb-4">Informações Básicas</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-blue-100 mb-2">Nome do Ninja:</label>
+                                <input type="text" id="playerName" class="w-full bg-white/20 text-white rounded-lg px-4 py-2 border border-white/30 focus:border-orange-400 focus:outline-none" placeholder="Digite seu nome ninja">
+                            </div>
+                            <div>
+                                <label class="block text-blue-100 mb-2">Vila:</label>
+                                <select id="playerVillage" class="w-full bg-white/20 text-white rounded-lg px-4 py-2 border border-white/30 focus:border-orange-400 focus:outline-none">
+                                    <option value="folha">Vila da Folha</option>
+                                    <option value="areia">Vila da Areia</option>
+                                    <option value="nevoa">Vila da Névoa</option>
+                                    <option value="pedra">Vila da Pedra</option>
+                                    <option value="nuvem">Vila da Nuvem</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-blue-100 mb-2">Elemento Principal:</label>
+                                <select id="playerElement" class="w-full bg-white/20 text-white rounded-lg px-4 py-2 border border-white/30 focus:border-orange-400 focus:outline-none">
+                                    <option value="fogo">Fogo 🔥</option>
+                                    <option value="agua">Água 💧</option>
+                                    <option value="terra">Terra 🌍</option>
+                                    <option value="vento">Vento 💨</option>
+                                    <option value="raio">Raio ⚡</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Habilidades -->
+                    <div class="bg-white/10 backdrop-blur-md rounded-xl p-6">
+                        <h3 class="text-white font-bold text-xl mb-4">Habilidades</h3>
+                        <div class="space-y-4">
+                            <div class="skill-item">
+                                <div class="flex justify-between mb-2">
+                                    <span class="text-blue-100">Ninjutsu</span>
+                                    <span class="text-white" id="ninjutsuLevel">5</span>
+                                </div>
+                                <div class="w-full bg-gray-700 rounded-full h-2">
+                                    <div class="bg-red-500 h-2 rounded-full" style="width: 50%" id="ninjutsuBar"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="flex justify-between mb-2">
+                                    <span class="text-blue-100">Taijutsu</span>
+                                    <span class="text-white" id="taijutsuLevel">3</span>
+                                </div>
+                                <div class="w-full bg-gray-700 rounded-full h-2">
+                                    <div class="bg-green-500 h-2 rounded-full" style="width: 30%" id="taijutsuBar"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="flex justify-between mb-2">
+                                    <span class="text-blue-100">Genjutsu</span>
+                                    <span class="text-white" id="genjutsuLevel">2</span>
+                                </div>
+                                <div class="w-full bg-gray-700 rounded-full h-2">
+<div class="bg-red-700 h-2 rounded-full" style="width: 20%" id="genjutsuBar"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button id="saveProfile" class="w-full mt-6 bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-lg transition-colors">
+                            Salvar Perfil
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção Créditos -->
+        <section id="creditos" class="min-h-screen flex flex-col justify-center items-center px-4 section hidden">
+            <div class="max-w-2xl mx-auto text-center">
+                <h2 class="text-4xl font-bold text-white mb-8">Créditos</h2>
+                
+                <div class="bg-white/10 backdrop-blur-md rounded-xl p-8 mb-8">
+                    <h3 class="text-white font-bold text-xl mb-4">Desenvolvimento</h3>
+                    <p class="text-blue-100 mb-4">
+                        Jogo web desenvolvido com HTML5, CSS3, JavaScript e TailwindCSS
+                    </p>
+                    <p class="text-blue-100">
+                        Criado por: <span class="text-orange-400 font-bold">Cline AI Assistant</span>
+                    </p>
+                </div>
+
+                <div class="bg-white/10 backdrop-blur-md rounded-xl p-8 mb-8">
+                    <h3 class="text-white font-bold text-xl mb-4">Franquia Original</h3>
+                    <p class="text-blue-100 mb-2">
+                        <strong>Naruto</strong> é uma criação de <span class="text-orange-400 font-bold">Masashi Kishimoto</span>
+                    </p>
+                    <p class="text-blue-100 mb-2">
+                        Publicado pela Shueisha e animado pelo Studio Pierrot
+                    </p>
+                    <p class="text-blue-100 text-sm">
+                        Este é um projeto fan-made sem fins lucrativos
+                    </p>
+                </div>
+
+                <div class="bg-white/10 backdrop-blur-md rounded-xl p-8">
+                    <h3 class="text-white font-bold text-xl mb-4">Tecnologias Utilizadas</h3>
+                    <div class="grid grid-cols-2 gap-4 text-blue-100">
+                        <div>• HTML5</div>
+                        <div>• CSS3</div>
+                        <div>• JavaScript ES6+</div>
+                        <div>• TailwindCSS</div>
+                        <div>• Font Awesome</div>
+                        <div>• LocalStorage API</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal de Diálogo -->
+    <div id="dialogModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white/10 backdrop-blur-md rounded-xl p-6 max-w-md w-full">
+            <div class="text-center mb-4">
+                <div class="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center text-2xl" id="dialogAvatar">
+                    🍜
+                </div>
+                <h3 class="text-white font-bold text-xl" id="dialogName">Naruto</h3>
+            </div>
+            <p class="text-blue-100 text-center mb-6" id="dialogText">
+                Olá! Bem-vindo à Vila da Folha, dattebayo!
+            </p>
+            <button id="closeDialog" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 rounded-lg transition-colors">
+                Fechar
+            </button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
