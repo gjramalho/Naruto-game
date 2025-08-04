@@ -175,7 +175,7 @@
 
 /* Card Kakashi Hatake: cinza e azul escuro */
 .npc-card[data-npc="kakashi"] {
-    background: linear-gradient(135deg, #f3f4f6 60%, #1e3a8a 100%);
+    background: linear-gradient(135deg, #d2d2d3 60%, rgb(4, 26, 87) 100%);
     border: 2px solid #1e3a8a;
     box-shadow: 0 8px 32px rgba(30,58,138,0.25);
     color: #1e3a8a !important;

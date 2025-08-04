@@ -148,7 +148,7 @@ class NarutoGame {
         document.addEventListener('keydown', (e) => {
             this.handleKeyPress(e);
         });
-    }
+    } 
 
     showSection(sectionId) {
         // Esconder todas as seções
