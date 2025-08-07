@@ -152,6 +152,13 @@
     overflow: hidden;
 }
 
+/* Card Naruto Uzumaki: laranja e azul */
+.npc-card[data-npc="naruto"] {  
+    background: linear-gradient(135deg, #ffb347 60%, #0f99f5 100%);
+    border: 2px solid #f7931e;
+    box-shadow: 0 8px 32px rgba(255,179,71,0.25);
+}
+
 /* Card Sasuke Uchiha: vermelho e preto */
 .npc-card[data-npc="sasuke"] {
     background: linear-gradient(135deg, #1a0000 60%, #ff0000 100%);
@@ -175,7 +182,7 @@
 
 /* Card Kakashi Hatake: cinza e azul escuro */
 .npc-card[data-npc="kakashi"] {
-    background: linear-gradient(135deg, #d2d2d3 60%, rgb(4, 26, 87) 100%);
+    background: linear-gradient(135deg, #a9a9ac 60%, rgb(4, 26, 87) 100%);
     border: 2px solid #1e3a8a;
     box-shadow: 0 8px 32px rgba(30,58,138,0.25);
     color: #1e3a8a !important;
@@ -313,7 +320,7 @@ button:active::before {
 
 .particle-effect::before,
 .particle-effect::after {
-    content: '✨';
+    content: '🍥';
     position: absolute;
     font-size: 12px;
     color: #fbbf24;

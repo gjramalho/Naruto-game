@@ -31,8 +31,8 @@ class NarutoGame {
             },
             sasuke: {
                 name: 'Sasuke Uchiha',
-                avatar: '⚡',
-                color: 'bg-purple-600',
+                avatar: '👁️',
+                color: 'bg-red-600',
                 dialogues: [
                     'Hmph... Outro ninja fraco.',
                     'O poder é tudo. Sem ele, você não pode proteger nada.',
@@ -53,7 +53,7 @@ class NarutoGame {
             },
             kakashi: {
                 name: 'Kakashi Hatake',
-                avatar: '👁️',
+                avatar: '⚡',
                 color: 'bg-gray-600',
                 dialogues: [
                     'Yo! Desculpe o atraso, me perdi no caminho da vida.',
