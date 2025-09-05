@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro Ninja - Naruto Game</title>
+    <!-- Tailwind via Vite/PostCSS (input.css importa o theme.css) -->
+    <link rel="stylesheet" href="/src/styles/input.css">
+    <!-- Fonte local (preferida). Se não existir arquivo local, o fallback do Google Fonts garante a fonte. -->
+    <link rel="stylesheet" href="assets/fonts.css">
+    <link href="https://fonts.googleapis.com/css2?family=Yuji+Syuku&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="register.css">
+</head>
+<body class="akatsuki-bg naruto-theme">
+    <div class="min-h-screen flex items-center justify-center">
+    <!-- Toggle de tema simples e persistente -->
+    <button id="registerThemeToggle" class="fixed top-4 right-4 z-10 bg-white/10 text-white rounded-full px-3 py-2 border border-white/20 hover:bg-white/20 transition">
+            <span id="registerThemeIcon" aria-hidden="true">🌙</span>
+        </button>
+        <!-- Lado direito: formulário de cadastro -->
+        <div class="akatsuki-form-container">
+            <form id="registerForm" class="akatsuki-form" novalidate>
+                <h1><span class="icon" aria-hidden="true" style="left:0;top:auto;position:relative;margin-right:8px;color:#ffcc00;">📜</span>Cadastro Ninja</h1>
+
+                <div class="relative mt-4">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" name="email" placeholder="seu@exemplo.com" required>
+                    <span class="icon" aria-hidden="true">✉️</span>
+                </div>
+
+                <div class="relative">
+                    <label for="nickname">Nome Ninja (único)</label>
+                    <input type="text" id="nickname" name="nickname" placeholder="Nome ninja" required>
+                    <span class="icon" aria-hidden="true">👤</span>
+                </div>
+
+                <div class="relative">
+                    <label for="password">Senha</label>
+                    <input type="password" id="password" name="password" placeholder="Senha forte" required>
+                    <span class="icon" aria-hidden="true">🔑</span>
+                </div>
+
+                <div class="relative">
+                    <label for="confirmPassword">Confirme a Senha</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Repita a senha" required>
+                    <span class="icon" aria-hidden="true">🔑</span>
+                </div>
+
+                <button type="submit"><span aria-hidden="true" style="margin-right:8px">⚡</span>Criar Conta</button>
+
+                <div id="registerError" class="error-msg hidden mt-3"><span aria-hidden="true">✖️</span><span></span></div>
+                <div id="registerSuccess" class="success-msg hidden mt-3"><span aria-hidden="true">✔️</span><span></span></div>
+            </form>
+        </div>
+    </div>
+
+    <script src="register.js"></script>
+</body>
+</html>

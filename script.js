@@ -79,13 +79,16 @@ class NarutoGame {
         console.log('🍃 Vila da Folha carregada com sucesso!');
     }
 
+    // Registra listeners para navegação (por data-section), menu mobile e toggle de tema
     setupEventListeners() {
         // Navegação
-        document.querySelectorAll('.nav-link').forEach(link => {
+    // Navegação: data-section ao invés de anchors
+    document.querySelectorAll('.nav-link').forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
-                const section = e.target.getAttribute('href').substring(1);
-                this.showSection(section);
+                const btn = e.currentTarget;
+                const section = btn.getAttribute('data-section');
+                if (section) this.showSection(section);
             });
         });
 
@@ -97,7 +100,7 @@ class NarutoGame {
             mobileMenu.classList.toggle('hidden');
         });
 
-        // Toggle tema
+    // Toggle tema: persiste em localStorage (narutoGameTheme = 'dark'|'light')
         const themeToggle = document.getElementById('themeToggle');
         themeToggle.addEventListener('click', () => {
             this.toggleTheme();
@@ -150,6 +153,7 @@ class NarutoGame {
         });
     } 
 
+    // Mostra uma seção por vez e marca item de menu ativo
     showSection(sectionId) {
         // Esconder todas as seções
         document.querySelectorAll('.section').forEach(section => {
@@ -169,8 +173,10 @@ class NarutoGame {
             link.classList.remove('active');
         });
 
-        document.querySelectorAll(`[href="#${sectionId}"]`).forEach(link => {
-            link.classList.add('active');
+        document.querySelectorAll('.nav-link').forEach(link => {
+            if (link.getAttribute('data-section') === sectionId) {
+                link.classList.add('active');
+            }
         });
 
         this.currentSection = sectionId;
@@ -311,21 +317,22 @@ class NarutoGame {
         this.playSound('save');
     }
 
+    // Alterna entre naruto-theme (claro) e akatsuki-theme (escuro)
     toggleTheme() {
         this.isDarkMode = !this.isDarkMode;
         const body = document.getElementById('body');
-        const themeIcon = document.getElementById('themeIcon');
+    const themeIcon = document.getElementById('themeIcon');
 
         if (this.isDarkMode) {
             body.classList.remove('naruto-theme');
             body.classList.remove('dark-theme');
             body.classList.add('akatsuki-theme');
-            themeIcon.className = 'fas fa-sun';
+            if (themeIcon) themeIcon.textContent = '☀️';
         } else {
             body.classList.remove('akatsuki-theme');
             body.classList.remove('dark-theme');
             body.classList.add('naruto-theme');
-            themeIcon.className = 'fas fa-moon';
+            if (themeIcon) themeIcon.textContent = '🌙';
         }
 
         localStorage.setItem('narutoGameTheme', this.isDarkMode ? 'dark' : 'light');
@@ -409,6 +416,7 @@ class NarutoGame {
         localStorage.setItem('narutoGameData', JSON.stringify(gameData));
     }
 
+    // Carrega dados e aplica tema salvo
     loadPlayerData() {
         const savedData = localStorage.getItem('narutoGameData');
         
@@ -429,14 +437,14 @@ class NarutoGame {
         const themeIcon = document.getElementById('themeIcon');
         if (savedTheme === 'dark') {
             this.isDarkMode = true;
-            body.classList.remove('naruto-theme');
-            body.classList.add('dark-theme');
-            if (themeIcon) themeIcon.className = 'fas fa-sun';
+            body.classList.remove('naruto-theme', 'dark-theme');
+            body.classList.add('akatsuki-theme');
+            if (themeIcon) themeIcon.textContent = '☀️';
         } else {
             this.isDarkMode = false;
-            body.classList.remove('dark-theme');
+            body.classList.remove('akatsuki-theme', 'dark-theme');
             body.classList.add('naruto-theme');
-            if (themeIcon) themeIcon.className = 'fas fa-moon';
+            if (themeIcon) themeIcon.textContent = '🌙';
         }
     }
 

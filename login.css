@@ -1,0 +1,29 @@
+body {
+  font-family: 'Yuji Syuku', serif;
+}
+.akatsuki-bg {
+  background: linear-gradient(135deg, #1a0000 0%, #330000 100%);
+  min-height: 100vh;
+}
+.glass-card-dark {
+  background: rgba(30, 30, 30, 0.85);
+  backdrop-filter: blur(12px);
+  border-radius: 1.5rem;
+  box-shadow: 0 8px 32px rgba(204,0,0,0.25);
+  border: 1px solid #ff4444;
+}
+.login-title-dark {
+  background: linear-gradient(90deg, #ff4444, #cc0000, #fffbe6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-stroke: 2px #1a0000;
+  text-shadow: 0 0 16px #ff4444, 0 0 8px #fffbe6;
+  font-size: 2.5rem;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+.character-card { transition: transform 0.2s, box-shadow 0.2s; }
+.character-card:hover { transform: scale(1.07); box-shadow: 0 0 24px #ff4444; }
+.selected { border: 2px solid #ff4444; box-shadow: 0 0 16px #ff4444; }

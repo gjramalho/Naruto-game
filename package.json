@@ -1,0 +1,17 @@
+{
+  "name": "naruto-game",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview --port 5174"
+  },
+  "devDependencies": {
+  "vite": "^5.4.0",
+  "tailwindcss": "^3.4.10",
+  "autoprefixer": "^10.4.20",
+  "postcss": "^8.4.41"
+  }
+}
