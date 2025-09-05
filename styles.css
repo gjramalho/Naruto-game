@@ -63,6 +63,16 @@
     background: linear-gradient(135deg, #ff6b35, #f7931e, #ffb347, #4a90e2);
 }
 
+/* Select transparente normalmente na aba de perfil */
+
+/* Fundo preto para dropdown aberto (usando focus) */
+.naruto-theme #perfil select:focus {
+    background: #fff !important;
+    color: #111 !important;
+    border-color: #fb923c !important;
+}
+
+
 .naruto-theme .header-bg {
     background: rgba(255, 107, 53, 0.95);
     border-color: rgba(255, 179, 71, 0.8);
@@ -79,19 +89,32 @@
     background: linear-gradient(135deg, #1a0000, #330000, #660000, #000000);
 }
 
+/* Corrige cor das letras do select de vila e elemento no tema akatsuki */
+.akatsuki-theme #perfil select {
+    color: #fff !important;
+}
+
+/* Fundo branco e texto preto quando o select está aberto (focus) no tema akatsuki */
+.akatsuki-theme #perfil select:focus {
+    background: #fff !important;
+    color: #111 !important;
+    border-color: #ff4444 !important;
+}
+
+
 .akatsuki-theme .header-bg {
     background: rgba(204, 0, 0, 0.2);
     border-color: rgba(255, 0, 0, 0.3);
 }
 
 .akatsuki-theme .glass-card {
-    background: rgba(0, 0, 0, 0.3);
     border: 1px solid rgba(204, 0, 0, 0.4);
-    box-shadow: 0 8px 32px rgba(204, 0, 0, 0.3);
-}
-
+/* Select transparente na aba de perfil, sempre, inclusive aberto */
 .akatsuki-theme .text-primary {
     color: #ff4444 !important;
+    background: rgba(255,255,255,0.2) !important;
+    color: #fff !important;
+    border-color: #fb923c !important;
 }
 
 .akatsuki-theme .text-secondary {
@@ -99,9 +122,11 @@
 }
 
 /* Tema Dark (Preto e Branco) */
+/* Tema Dark (Preto e Vermelho) */
 .dark-theme {
-    background: #111 !important;
+    background: linear-gradient(135deg, #1a0000, #330000, #660000, #000000) !important;
     color: #fff !important;
+}
 }
 
 .dark-theme .header-bg {

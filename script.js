@@ -318,9 +318,11 @@ class NarutoGame {
 
         if (this.isDarkMode) {
             body.classList.remove('naruto-theme');
-            body.classList.add('dark-theme');
+            body.classList.remove('dark-theme');
+            body.classList.add('akatsuki-theme');
             themeIcon.className = 'fas fa-sun';
         } else {
+            body.classList.remove('akatsuki-theme');
             body.classList.remove('dark-theme');
             body.classList.add('naruto-theme');
             themeIcon.className = 'fas fa-moon';
