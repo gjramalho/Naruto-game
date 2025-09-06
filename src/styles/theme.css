@@ -1,4 +1,5 @@
 /* Estilos customizados para o jogo Naruto */
+@layer components {
 
 /* Animações */
 @keyframes fade-in {
@@ -83,6 +84,19 @@
     box-shadow: 0 8px 32px rgba(255, 107, 53, 0.2);
 }
 
+/* Barra lateral no tema Naruto */
+.naruto-theme .sidebar {
+    background: linear-gradient(180deg, rgba(255, 140, 66, 0.85), rgba(255, 107, 53, 0.75)) !important;
+    border-color: rgba(255, 179, 71, 0.8) !important;
+    color: #1b1b1b !important;
+}
+.naruto-theme .sidebar .nav-link:hover {
+    background: rgba(255, 255, 255, 0.3) !important;
+    color: #111 !important;
+}
+.naruto-theme .sidebar .menu-label { color: #111 !important; }
+.naruto-theme .sidebar svg { color: #111 !important; }
+
 /* Tema Akatsuki (Escuro) */
 .akatsuki-theme {
     background: linear-gradient(135deg, #1a0000, #330000, #660000, #000000);
@@ -118,8 +132,12 @@
 /* Barra lateral no tema Akatsuki */
 .akatsuki-theme .sidebar,
 .akatsuki-theme .side-menu {
-    background: #330000 !important;
+    background: linear-gradient(180deg, #330000, #1a0000) !important;
     border-color: #ff4444 !important;
+    color: #fff !important;
+}
+.akatsuki-theme .sidebar .nav-link:hover {
+    background: rgba(255, 68, 68, 0.2) !important;
     color: #fff !important;
 }
 
@@ -533,3 +551,5 @@ button:active::before {
 .ninja-badge:hover::before {
     left: 100%;
 }
+
+} /* fim @layer components */

@@ -27,3 +27,9 @@ body {
 .character-card { transition: transform 0.2s, box-shadow 0.2s; }
 .character-card:hover { transform: scale(1.07); box-shadow: 0 0 24px #ff4444; }
 .selected { border: 2px solid #ff4444; box-shadow: 0 0 16px #ff4444; }
+
+/* Destaque de erro em campos do login */
+.input-error {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 8px #ef4444;
+}

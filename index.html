@@ -3,12 +3,16 @@
 <head>
     <!-- Guardas de fluxo: força o caminho cadastro -> login -> index -->
     <script>
-    // Fluxo: cadastro -> login -> seleção de personagem
-    if (!localStorage.getItem('narutoGameRegistered')) {
-        window.location.href = 'register.html';
-    } else if (!localStorage.getItem('narutoGameLogged')) {
-        window.location.href = 'login.html';
-    }
+        // Se não estiver logado (lembrado) ou em sessão atual, ir para login
+        try {
+            const remembered = localStorage.getItem('narutoGameLogged') === 'true';
+            const session = sessionStorage.getItem('narutoSession') === 'true';
+            if (!remembered && !session) {
+                window.location.href = 'login.html';
+            }
+        } catch (_) {
+            window.location.href = 'login.html';
+        }
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,69 +21,155 @@
     <link rel="stylesheet" href="/src/styles/input.css">
     
 </head>
-<body class="min-h-screen bg-gradient-to-br from-black via-[#1a0000] to-[#330000] bg-fixed transition-all duration-500 naruto-theme" id="body">
-    <!-- Header Fixo -->
-    <header class="fixed top-0 w-full header-bg backdrop-blur-md border-b border-white/20 z-50">
-        <nav class="container mx-auto px-4 py-4 flex justify-between items-center">
-            <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 bg-gradient-to-r from-orange-400 to-orange-600 rounded-full flex items-center justify-center shadow-lg">
-                    <span class="text-white text-lg" aria-hidden="true">🔥</span>
-                </div>
-                <h1 class="text-white font-bold text-xl tracking-wide">Vila da Folha</h1>
-            </div>
-            
-            <!-- Navegação Desktop Moderna (usa data-section em vez de links/href) -->
-            <ul class="hidden md:flex space-x-2 bg-white/10 backdrop-blur-sm rounded-full px-2 py-2">
-                <li class="flex-1">
-                    <button style="width:100%" class="nav-link active px-6 py-2 rounded-full text-white font-medium transition-all duration-300 hover:bg-white/20 flex items-center space-x-2 w-full" data-section="vila">
-                        <span aria-hidden="true">🏠</span>
-                        <span>Vila</span>
-                    </button>
-                </li>
-                <li class="flex-1">
-                    <button style="width:100%" class="nav-link px-6 py-2 rounded-full text-white/80 font-medium transition-all duration-300 hover:bg-white/20 hover:text-white flex items-center space-x-2 w-full" data-section="perfil">
-                        <span aria-hidden="true">🥷</span>
-                        <span>Perfil</span>
-                    </button>
-                </li>
-                <li class="flex-1">
-                    <button style="width:100%" class="nav-link px-6 py-2 rounded-full text-white/80 font-medium transition-all duration-300 hover:bg-white/20 hover:text-white flex items-center space-x-2 w-full" data-section="creditos">
-                        <span aria-hidden="true">📜</span>
-                        <span>Créditos</span>
-                    </button>
-                </li>
-            </ul>
-            
-            <div class="flex items-center space-x-4">
-                <button id="themeToggle" class="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/20 transition-all duration-300 shadow-lg">
-                    <span id="themeIcon" aria-hidden="true">🎨</span>
-                </button>
-                <button class="md:hidden w-10 h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/20 transition-all duration-300" id="mobileMenuBtn">
-                    <span aria-hidden="true">☰</span>
-                </button>
-            </div>
-        </nav>
-        
-    <!-- Menu Mobile (botões com data-section; listeners no script.js) -->
-    <div class="md:hidden akatsuki-menu-bg backdrop-blur-md hidden" id="mobileMenu">
-            <div class="px-4 py-2 space-y-2">
-                <button class="block w-full text-left text-white akatsuki-menu-link py-2 nav-link" data-section="vila">Vila</button>
-                <button class="block w-full text-left text-white akatsuki-menu-link py-2 nav-link" data-section="perfil">Perfil</button>
-                <button class="block w-full text-left text-white akatsuki-menu-link py-2 nav-link" data-section="creditos">Créditos</button>
+<body class="min-h-screen bg-fixed transition-all duration-500 naruto-theme" id="body">
+    <!-- Header removido: menu lateral fixo substitui o menu superior -->
+
+    <!-- Sidebar Lateral -->
+    <aside id="sidebar" class="sidebar fixed top-0 left-0 z-40 h-screen rounded-none shadow-lg transition-all duration-300 w-64 flex flex-col border-r">
+    <div class="p-4 border-b border-white/10">
+            <div class="flex flex-col items-center">
+                <div class="w-16 h-16 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-2xl">🥷</div>
+        <div id="sidebarPlayerName" class="mt-2 text-white font-semibold menu-label">Jogador</div>
             </div>
         </div>
-    </header>
+        <nav class="p-3 space-y-2 overflow-y-auto">
+            <button class="nav-link w-full flex items-center gap-3 p-3 rounded-xl hover:bg-gray-700 hover:text-white transition-all duration-300" data-section="perfil">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6.75a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 19.5a7.5 7.5 0 1115 0v.75a.75.75 0 01-.75.75h-13.5a.75.75 0 01-.75-.75V19.5z" />
+                </svg>
+                <span class="menu-label">Perfil</span>
+            </button>
+            <button class="nav-link w-full flex items-center gap-3 p-3 rounded-xl hover:bg-gray-700 hover:text-white transition-all duration-300" data-section="vila">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l9-8.25L20.25 12m-1.5 0v7.5A1.5 1.5 0 0117.25 21H6.75A1.5 1.5 0 015.25 19.5V12" />
+                </svg>
+                <span class="menu-label">Vila</span>
+            </button>
+            <button class="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-gray-700 hover:text-white transition-all duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v1.5M17.25 3v1.5M3 8.25h18M4.5 7.5v12.75a.75.75 0 00.75.75h13.5a.75.75 0 00.75-.75V7.5m-12 6h.008v.008H7.5V13.5zm3 0h.008v.008H10.5V13.5zm3 0h.008v.008H13.5V13.5zm3 0h.008v.008H16.5V13.5z" />
+                </svg>
+                <span class="menu-label">Missões Diárias</span>
+            </button>
+            <button class="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-gray-700 hover:text-white transition-all duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 8.25a3 3 0 104.374 0m3.813 10.5L12 3.75 6 18.75" />
+                </svg>
+                <span class="menu-label">Personagem</span>
+            </button>
+            <button class="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-gray-700 hover:text-white transition-all duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l8.25-12v9h8.25l-8.25 12v-9H3.75z" />
+                </svg>
+                <span class="menu-label">Arena de Batalha</span>
+            </button>
+            <button class="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-gray-700 hover:text-white transition-all duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75h19.5M3 6h18a1.5 1.5 0 011.5 1.5v9A1.5 1.5 0 0121 18H3a1.5 1.5 0 01-1.5-1.5v-9A1.5 1.5 0 013 6zm3 2.25h.008v.008H6V8.25zM18 8.25h.008v.008H18V8.25zM12 9.75a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5z" />
+                </svg>
+                <span class="menu-label">Loja de Créditos</span>
+            </button>
+        </nav>
+        <!-- Ações de conta -->
+        <div class="mt-auto p-3 border-t border-white/10 space-y-2">
+            <button id="changeCharacterBtn" class="nav-link w-full flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition-all duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v3m0 12v3m9-9h-3M6 12H3m15.364 6.364l-2.121-2.121M6.757 6.757 4.636 4.636m12.728 0-2.121 2.121M6.757 17.243l-2.121 2.121" />
+                </svg>
+                <span class="menu-label">Trocar Personagem</span>
+            </button>
+            <!-- Botão de Logoff -->
+            <button id="logoutBtn" class="nav-link w-full flex items-center gap-3 p-3 rounded-xl hover:bg-red-600/30 transition-all duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6A2.25 2.25 0 005.25 5.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12" />
+                </svg>
+                <span class="menu-label">Sair</span>
+            </button>
+        </div>
+        <!-- Botão de recolher removido: menu é fixo -->
+    </aside>
+
+    <!-- Toggle de Tema (topo direito) -->
+    <button id="themeToggle" class="fixed top-4 right-4 z-50 w-12 h-12 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/20 transition-all duration-300 shadow-lg" aria-label="Alternar tema">
+        <span id="themeIcon" aria-hidden="true">🎨</span>
+    </button>
+
+    <!-- Overlay removido: menu sempre visível -->
 
     <!-- Conteúdo Principal -->
-    <main class="pt-20">
-    <!-- Hero simples com CTA para cadastro (cadastro embutido foi removido) -->
-        <section class="min-h-screen flex items-center justify-center px-4 section active">
-            <div class="text-center max-w-2xl">
-                <h2 class="text-4xl font-bold text-[#ff4444] mb-6">Bem-vindo à Vila da Folha</h2>
-                <p class="text-red-100 text-lg mb-8">Prepare-se para se tornar um verdadeiro ninja!</p>
-                <a href="register.html" class="inline-flex items-center gap-2 bg-gradient-to-r from-[#ff4444] via-[#cc0000] to-black text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:scale-105 transition-transform">
-                    <span aria-hidden="true">📜</span> Ir para Cadastro
-                </a>
+    <main class="pt-6 pl-64 transition-all duration-300">
+        <!-- Seção Vila: Grid de NPCs + HUD de Nível/XP -->
+        <section id="vila" class="min-h-screen px-4 py-10 section active">
+            <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Coluna NPCs (2 colunas em desktop) -->
+                <div class="lg:col-span-2">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <!-- Naruto -->
+                    <div class="npc-card glass-card p-6 rounded-xl cursor-pointer hover:scale-105 active:scale-95 transition transform" data-npc="naruto" data-npc-name="naruto">
+                        <div class="flex items-center gap-4">
+                            <div class="w-14 h-14 rounded-full flex items-center justify-center text-2xl bg-orange-500 shadow-lg">🍜</div>
+                            <div>
+                                <h3 class="text-white font-bold text-lg">Naruto Uzumaki</h3>
+                                <p class="text-blue-100 text-sm">“Esse é o meu jeito ninja!”</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Sasuke -->
+                    <div class="npc-card glass-card p-6 rounded-xl cursor-pointer hover:scale-105 active:scale-95 transition transform" data-npc="sasuke" data-npc-name="sasuke">
+                        <div class="flex items-center gap-4">
+                            <div class="w-14 h-14 rounded-full flex items-center justify-center text-2xl bg-red-600 shadow-lg">👁️</div>
+                            <div>
+                                <h3 class="text-white font-bold text-lg">Sasuke Uchiha</h3>
+                                <p class="text-blue-100 text-sm">Sharingan atento…</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Sakura -->
+                    <div class="npc-card glass-card p-6 rounded-xl cursor-pointer hover:scale-105 active:scale-95 transition transform" data-npc="sakura" data-npc-name="sakura">
+                        <div class="flex items-center gap-4">
+                            <div class="w-14 h-14 rounded-full flex items-center justify-center text-2xl bg-pink-500 shadow-lg">🌸</div>
+                            <div>
+                                <h3 class="text-white font-bold text-lg">Sakura Haruno</h3>
+                                <p class="text-blue-100 text-sm">Suporte e força precisa.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Kakashi -->
+                    <div class="npc-card glass-card p-6 rounded-xl cursor-pointer hover:scale-105 active:scale-95 transition transform" data-npc="kakashi" data-npc-name="kakashi">
+                        <div class="flex items-center gap-4">
+                            <div class="w-14 h-14 rounded-full flex items-center justify-center text-2xl bg-gray-600 shadow-lg">⚡</div>
+                            <div>
+                                <h3 class="text-white font-bold text-lg">Kakashi Hatake</h3>
+                                <p class="text-blue-100 text-sm">Trabalho em equipe primeiro.</p>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                <!-- Coluna HUD/Infos -->
+                <aside class="glass-card rounded-xl p-6 h-max sticky top-24">
+                    <h3 class="text-white font-bold text-xl mb-4">Status do Ninja</h3>
+                    <div class="space-y-3">
+                        <div class="flex justify-between text-blue-100">
+                            <span>Nível</span>
+                            <span class="text-white font-semibold" id="playerLevel">1</span>
+                        </div>
+                        <div class="w-full bg-gray-700 rounded-full h-2">
+                            <div class="bg-orange-500 h-2 rounded-full" id="xpBar" style="width: 0%"></div>
+                        </div>
+                        <div class="text-right text-blue-100 text-sm">
+                            XP: <span id="playerXP">0/100</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-6">
+                        <button class="w-full bg-white/10 hover:bg-white/20 text-white font-semibold py-2 rounded-lg transition" onclick="window.narutoGame && window.narutoGame.startMission('Treino Diário')">
+                            📋 Missão do Dia
+                        </button>
+                    </div>
+                </aside>
             </div>
         </section>
 
@@ -222,6 +312,7 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script type="module" src="/script.js"></script>
+    <script type="module" src="/main.js"></script>
 </body>
 </html>

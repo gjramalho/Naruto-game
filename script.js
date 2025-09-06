@@ -72,6 +72,15 @@ class NarutoGame {
         this.setupEventListeners();
         this.updatePlayerDisplay();
         this.showSection('vila');
+
+        // Mostrar nickname do usuário logado na sidebar (se existir)
+        try {
+            const users = JSON.parse(localStorage.getItem('narutoUsers') || '[]');
+            const nickname = localStorage.getItem('narutoLoggedNickname');
+            const user = users.find(u => u.nickname === nickname);
+            const el = document.getElementById('sidebarPlayerName');
+            if (user && el) el.textContent = `@${user.nickname}`;
+        } catch {}
         
         // Adicionar efeitos de partículas
         this.addParticleEffects();
@@ -92,27 +101,37 @@ class NarutoGame {
             });
         });
 
-        // Menu mobile
+        // Menu mobile (removido no layout atual) – manter guardas para compatibilidade
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const mobileMenu = document.getElementById('mobileMenu');
-        
-        mobileMenuBtn.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
+        if (mobileMenuBtn && mobileMenu) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
 
     // Toggle tema: persiste em localStorage (narutoGameTheme = 'dark'|'light')
         const themeToggle = document.getElementById('themeToggle');
-        themeToggle.addEventListener('click', () => {
-            this.toggleTheme();
-        });
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => {
+                this.toggleTheme();
+            });
+        }
 
-        // NPCs interativos
+        // NPCs interativos (bloquear se personagem já escolhido)
         document.querySelectorAll('.npc-card').forEach(card => {
             card.addEventListener('click', () => {
+                const locked = localStorage.getItem('narutoGameCharacter');
+                if (locked) {
+                    this.showNotification('Você já tem um personagem. Use "Trocar Personagem" no menu.');
+                    return;
+                }
                 const npcId = card.getAttribute('data-npc');
                 this.interactWithNPC(npcId);
             });
         });
+
+    // (Busca de NPCs removida)
 
         // Modal de diálogo
         const closeDialog = document.getElementById('closeDialog');
@@ -134,6 +153,15 @@ class NarutoGame {
             this.savePlayerProfile();
         });
 
+        // Trocar personagem: limpa escolha e vai para login (seleção acontece lá)
+        const changeChar = document.getElementById('changeCharacterBtn');
+        if (changeChar) {
+            changeChar.addEventListener('click', () => {
+                localStorage.removeItem('narutoGameCharacter');
+                window.location.href = 'login.html';
+            });
+        }
+
         // Inputs do perfil
         document.getElementById('playerName').addEventListener('input', (e) => {
             this.player.name = e.target.value;
@@ -151,6 +179,14 @@ class NarutoGame {
         document.addEventListener('keydown', (e) => {
             this.handleKeyPress(e);
         });
+
+        // Logoff
+        const logoutBtn = document.getElementById('logoutBtn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', () => {
+                this.logout();
+            });
+        }
     } 
 
     // Mostra uma seção por vez e marca item de menu ativo
@@ -182,7 +218,8 @@ class NarutoGame {
         this.currentSection = sectionId;
 
         // Fechar menu mobile
-        document.getElementById('mobileMenu').classList.add('hidden');
+    const mm = document.getElementById('mobileMenu');
+    if (mm) mm.classList.add('hidden');
 
         // Efeitos especiais por seção
         this.addSectionEffects(sectionId);
@@ -453,6 +490,20 @@ class NarutoGame {
         localStorage.removeItem('narutoGameData');
         localStorage.removeItem('narutoGameTheme');
         location.reload();
+    }
+
+    // Logoff: limpa estado de login/personagem e volta ao login
+    logout() {
+        try {
+            localStorage.removeItem('narutoGameLogged');
+            localStorage.removeItem('narutoGameCharacter');
+            sessionStorage.removeItem('narutoSession');
+            // Mantém o tema e progresso, a não ser que queira limpar tudo:
+            // localStorage.removeItem('narutoGameData');
+        } catch (e) {
+            console.warn('Falha ao limpar localStorage no logoff:', e);
+        }
+        window.location.href = 'login.html';
     }
 
     // Método para adicionar conquistas (expansível)

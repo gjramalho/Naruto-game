@@ -10,12 +10,12 @@
     
     <link rel="stylesheet" href="login.css">
 </head>
-<body class="ninja-bg flex items-center justify-center">
+<body class="naruto-theme flex items-center justify-center" id="body">
     <!-- Toggle de tema simples e persistente -->
     <button id="loginThemeToggle" class="fixed top-4 right-4 z-10 bg-white/10 text-white rounded-full px-3 py-2 border border-white/20 hover:bg-white/20 transition">
         <span id="loginThemeIcon" aria-hidden="true">🌙</span>
     </button>
-    <div class="min-h-screen w-full flex flex-col md:flex-row items-center justify-center bg-gradient-to-br from-black via-[#1a0000] to-[#330000]">
+    <div class="min-h-screen w-full flex flex-col md:flex-row items-center justify-center">
         <!-- Formulário de Login -->
         <div class="w-full md:w-1/2 flex items-center justify-center">
             <div class="max-w-md w-full glass-card-dark p-8 m-8 animate-fade-in shadow-2xl">
@@ -37,10 +37,16 @@
                     <label class="block text-red-200 mb-2">Senha</label>
                     <input type="password" id="password" class="w-full px-4 py-2 rounded-lg bg-[#1a0000] text-red-100 font-bold border border-red-700 focus:border-red-500 focus:outline-none" placeholder="Digite sua senha" required>
                 </div>
+                <label class="flex items-center gap-2 text-red-200 select-none">
+                    <input type="checkbox" id="rememberMe" class="accent-red-600">
+                    Lembrar de mim
+                </label>
                 <button type="submit" class="w-full mt-4 bg-gradient-to-r from-red-700 via-red-900 to-black text-white font-bold py-3 rounded-lg transition-colors flex items-center justify-center gap-2 shadow-lg hover:scale-105">
                     <span aria-hidden="true">🔓</span> Entrar
                 </button>
                 <div id="loginError" class="text-red-400 text-center mt-2 hidden">Usuário ou senha inválidos!</div>
+                <div id="loginInfo" class="text-green-400 text-center mt-2 hidden"></div>
+        <p class="text-center text-red-200 mt-2">Não tem conta? <a href="register.html" class="text-orange-400 hover:underline font-semibold">Crie agora</a></p>
             </form>
         </div>
     </div>
@@ -73,6 +79,7 @@
             <button id="confirmCharacter" class="w-full mt-8 bg-gradient-to-r from-yellow-400 via-red-500 to-black text-black font-bold py-3 rounded-lg transition-colors disabled:opacity-50 hover:scale-105" disabled>Confirmar Personagem</button>
         </div>
     </div>
+    <script src="auth.js"></script>
     <script src="login.js"></script>
 </body>
 </html>

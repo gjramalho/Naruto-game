@@ -3,8 +3,7 @@
 // - Persiste flag de cadastro e redireciona para login
 // - Aplica tema salvo e permite alternar com persistência
 
-// Simulação de nicknames já cadastrados
-const usedNicknames = ['naruto', 'sasuke', 'sakura', 'kakashi'];
+// Base de usuários via localStorage (definida em auth.js)
 
 function validateEmail(email) {
   return /^[\w-.]+@[\w-]+\.[a-z]{2,}$/i.test(email);
@@ -50,10 +49,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('registerForm');
   if (!form) return;
 
-  form.addEventListener('submit', function (e) {
+  form.addEventListener('submit', async function (e) {
     e.preventDefault();
     const email = document.getElementById('email').value.trim();
-    const nickname = document.getElementById('nickname').value.trim().toLowerCase();
+    const nickname = document.getElementById('nickname').value.trim();
     const password = document.getElementById('password').value;
     const confirmPassword = document.getElementById('confirmPassword').value;
     const error = document.getElementById('registerError');
@@ -66,10 +65,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let msg = '';
     if (!validateEmail(email)) {
       msg = 'Insira um e-mail válido.';
-    } else if (nickname.length < 3) {
+    } else if (nickname.trim().length < 3) {
       msg = 'Nome ninja precisa ter pelo menos 3 caracteres.';
-    } else if (usedNicknames.includes(nickname)) {
-      msg = 'Este nome ninja já existe.';
     } else if (!validatePassword(password)) {
       msg = 'Senha fraca. Use 8+ caracteres, 1 maiúscula e 1 número.';
     } else if (password !== confirmPassword) {
@@ -79,13 +76,27 @@ document.addEventListener('DOMContentLoaded', () => {
     if (msg) {
       error.querySelector('span').textContent = msg;
       error.classList.remove('hidden');
-    } else {
-      success.querySelector('span').textContent = 'Cadastro concluído. Redirecionando para login...';
-      success.classList.remove('hidden');
-      localStorage.setItem('narutoGameRegistered', 'true');
-      setTimeout(() => {
-        window.location.href = 'login.html';
-      }, 1500);
+      return;
     }
+
+    // Criar usuário
+    if (!window.narutoAuth) {
+      error.querySelector('span').textContent = 'Erro interno de autenticação. Recarregue a página.';
+      error.classList.remove('hidden');
+      return;
+    }
+    const result = await window.narutoAuth.createUser({ email, nickname, password });
+    if (!result.ok) {
+      error.querySelector('span').textContent = result.error || 'Não foi possível criar a conta.';
+      error.classList.remove('hidden');
+      return;
+    }
+
+    success.querySelector('span').textContent = 'Cadastro concluído. Redirecionando para login...';
+    success.classList.remove('hidden');
+    localStorage.setItem('narutoGameRegistered', 'true');
+    setTimeout(() => {
+      window.location.href = 'login.html?registered=1';
+    }, 1200);
   });
 });

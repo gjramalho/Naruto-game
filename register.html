@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Yuji+Syuku&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="register.css">
 </head>
-<body class="akatsuki-bg naruto-theme">
+<body class="naruto-theme" id="body">
     <div class="min-h-screen flex items-center justify-center">
     <!-- Toggle de tema simples e persistente -->
     <button id="registerThemeToggle" class="fixed top-4 right-4 z-10 bg-white/10 text-white rounded-full px-3 py-2 border border-white/20 hover:bg-white/20 transition">
@@ -47,6 +47,7 @@
                 </div>
 
                 <button type="submit"><span aria-hidden="true" style="margin-right:8px">⚡</span>Criar Conta</button>
+                <p class="mt-2 text-sm">Já tem conta? <a href="login.html" class="text-orange-400" style="text-decoration:underline;">Entrar</a></p>
 
                 <div id="registerError" class="error-msg hidden mt-3"><span aria-hidden="true">✖️</span><span></span></div>
                 <div id="registerSuccess" class="success-msg hidden mt-3"><span aria-hidden="true">✔️</span><span></span></div>
@@ -54,6 +55,7 @@
         </div>
     </div>
 
+    <script src="auth.js"></script>
     <script src="register.js"></script>
 </body>
 </html>
