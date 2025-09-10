@@ -98,15 +98,22 @@ class NarutoGame {
                 const btn = e.currentTarget;
                 const section = btn.getAttribute('data-section');
                 if (section) this.showSection(section);
+                // Fechar menu após navegar (mobile)
+                this.closeMobileSidebar();
             });
         });
 
         // Menu mobile (removido no layout atual) – manter guardas para compatibilidade
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const mobileMenu = document.getElementById('mobileMenu');
-        if (mobileMenuBtn && mobileMenu) {
+        const overlay = document.getElementById('sidebarOverlay');
+        if (mobileMenuBtn) {
             mobileMenuBtn.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
+                document.body.classList.toggle('sidebar-open');
+            });
+        }
+        if (overlay) {
+            overlay.addEventListener('click', () => {
+                this.closeMobileSidebar();
             });
         }
 
@@ -185,8 +192,14 @@ class NarutoGame {
         if (logoutBtn) {
             logoutBtn.addEventListener('click', () => {
                 this.logout();
+                this.closeMobileSidebar();
             });
         }
+
+        // Fechar menu no Esc
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') this.closeMobileSidebar();
+        });
     } 
 
     // Mostra uma seção por vez e marca item de menu ativo
@@ -218,11 +231,14 @@ class NarutoGame {
         this.currentSection = sectionId;
 
         // Fechar menu mobile
-    const mm = document.getElementById('mobileMenu');
-    if (mm) mm.classList.add('hidden');
+    this.closeMobileSidebar();
 
         // Efeitos especiais por seção
         this.addSectionEffects(sectionId);
+    }
+
+    closeMobileSidebar() {
+        document.body.classList.remove('sidebar-open');
     }
 
     addSectionEffects(sectionId) {

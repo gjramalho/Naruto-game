@@ -1,5 +1,12 @@
 /* Estilos customizados para o jogo Naruto */
 @layer components {
+/* Estados de abertura do sidebar no mobile */
+.sidebar-open #sidebar {
+    transform: translateX(0) !important;
+}
+.sidebar-open #sidebarOverlay {
+    display: block !important;
+}
 
 /* Animações */
 @keyframes fade-in {
