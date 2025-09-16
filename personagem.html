@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Personagem - Vila da Folha</title>
+  <link rel="stylesheet" href="/src/styles/input.css">
+</head>
+<body class="min-h-screen bg-fixed transition-all duration-500 naruto-theme personagem-page" id="body">
+  <!-- Toggle de Tema (topo direito) -->
+  <button id="themeToggle" class="fixed top-4 right-4 z-50 w-12 h-12 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/20 transition-all duration-300 shadow-lg" aria-label="Alternar tema">
+      <span id="themeIcon" aria-hidden="true">🎨</span>
+  </button>
+  <!-- Reutiliza a sidebar do index (css global) -->
+  <aside id="sidebar" class="sidebar fixed top-0 left-0 z-40 h-screen rounded-none shadow-lg transition-all duration-300 w-64 flex flex-col border-r transform lg:translate-x-0">
+    <div class="p-4 border-b border-white/10">
+      <div class="flex flex-col items-center">
+        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-2xl">🥷</div>
+        <div id="sidebarPlayerName" class="mt-2 text-white font-semibold menu-label">Jogador</div>
+      </div>
+    </div>
+    <nav class="p-3 space-y-2 overflow-y-auto">
+      <!-- keep same structure as index.html for consistent styling and behavior -->
+  <a href="/" class="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-gray-700 hover:text-white transition-all duration-300">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l9-8.25L20.25 12m-1.5 0v7.5A1.5 1.5 0 0117.25 21H6.75A1.5 1.5 0 015.25 19.5V12" />
+        </svg>
+        <span class="menu-label">Vila</span>
+      </a>
+      <button class="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-gray-700 hover:text-white transition-all duration-300">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v1.5M17.25 3v1.5M3 8.25h18M4.5 7.5v12.75a.75.75 0 00.75.75h13.5a.75.75 0 00.75-.75V7.5m-12 6h.008v.008H7.5V13.5zm3 0h.008v.008H10.5V13.5zm3 0h.008v.008H13.5V13.5zm3 0h.008v.008H16.5V13.5z" />
+        </svg>
+        <span class="menu-label">Missões Diárias</span>
+      </button>
+  <a href="/personagem.html" class="nav-link w-full flex items-center gap-3 p-3 rounded-xl hover:bg-gray-700 hover:text-white transition-all duration-300">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 8.25a3 3 0 104.374 0m3.813 10.5L12 3.75 6 18.75" />
+        </svg>
+        <span class="menu-label">Personagem</span>
+      </a>
+      <button class="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-gray-700 hover:text-white transition-all duration-300">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l8.25-12v9h8.25l-8.25 12v-9H3.75z" />
+        </svg>
+        <span class="menu-label">Arena de Batalha</span>
+      </button>
+      <button class="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-gray-700 hover:text-white transition-all duration-300">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75h19.5M3 6h18a1.5 1.5 0 011.5 1.5v9A1.5 1.5 0 0121 18H3a1.5 1.5 0 01-1.5-1.5v-9A1.5 1.5 0 013 6zm3 2.25h.008v.008H6V8.25zM18 8.25h.008v.008H18V8.25zM12 9.75a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5z" />
+        </svg>
+        <span class="menu-label">Loja de Créditos</span>
+      </button>
+    </nav>
+    <div class="mt-auto p-3 border-t border-white/10 space-y-2">
+      <button id="changeCharacterBtn" class="nav-link w-full flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition-all duration-300">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v3m0 12v3m9-9h-3M6 12H3m15.364 6.364l-2.121-2.121M6.757 6.757 4.636 4.636m12.728 0-2.121 2.121M6.757 17.243l-2.121 2.121" />
+        </svg>
+        <span class="menu-label">Trocar Personagem</span>
+      </button>
+      <button id="logoutBtn" class="nav-link w-full flex items-center gap-3 p-3 rounded-xl hover:bg-red-600/30 transition-all duration-300">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6A2.25 2.25 0 005.25 5.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12" />
+        </svg>
+        <span class="menu-label">Sair</span>
+      </button>
+    </div>
+  </aside>
+
+  <main class="pt-6 pl-0 lg:pl-64 transition-all duration-300">
+    <section class="min-h-screen px-4 py-10">
+        <div class="max-w-6xl mx-auto w-full">
+        <h2 class="text-4xl font-bold text-white mb-8 text-center">Personagem</h2>
+        <div class="personagem-layout">
+          <!-- Espaço para conteúdo à esquerda (pode ficar vazio) -->
+          <div></div>
+          <!-- Habilidades (apenas) -->
+          <div class="glass-card bg-white/10 backdrop-blur-md rounded-xl p-6 skills-container skills-card-right flex flex-col justify-between">
+            <h3 class="text-white font-bold text-xl mb-4">Habilidades</h3>
+            <div class="space-y-4">
+              <div class="skill-item">
+                <div class="flex justify-between mb-2">
+                  <span class="text-blue-100">Ninjutsu</span>
+                  <span class="text-white" id="ninjutsuLevel">5</span>
+                </div>
+                <div class="w-full bg-gray-700 rounded-full h-2 skill-bar">
+                  <div id="ninjutsuBar" class="h-2 rounded-full bg-red-500" style="width:50%"></div>
+                </div>
+              </div>
+
+              <div class="skill-item">
+                <div class="flex justify-between mb-2">
+                  <span class="text-blue-100">Taijutsu</span>
+                  <span class="text-white" id="taijutsuLevel">3</span>
+                </div>
+                <div class="w-full bg-gray-700 rounded-full h-2 skill-bar">
+                  <div id="taijutsuBar" class="h-2 rounded-full bg-green-500" style="width:30%"></div>
+                </div>
+              </div>
+
+              <div class="skill-item">
+                <div class="flex justify-between mb-2">
+                  <span class="text-blue-100">Genjutsu</span>
+                  <span class="text-white" id="genjutsuLevel">2</span>
+                </div>
+                <div class="w-full bg-gray-700 rounded-full h-2 skill-bar">
+                  <div id="genjutsuBar" class="h-2 rounded-full bg-red-700" style="width:20%"></div>
+                </div>
+              </div>
+            </div>
+
+            <button id="saveProfile" class="w-full mt-6 bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-lg transition-colors">
+              Salvar Personagem
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="/script.js"></script>
+  <script type="module" src="/personagem.js"></script>
+</body>
+</html>

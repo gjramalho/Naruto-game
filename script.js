@@ -94,12 +94,12 @@ class NarutoGame {
     // Registra listeners para navegação (por data-section), menu mobile e toggle de tema
     setupEventListeners() {
         // Navegação
-    // Navegação: data-section ao invés de anchors
-    document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', (e) => {
+        // Navegação: apenas elementos com `data-section` serão tratados como navegação SPA.
+        // Isso permite que <a href="..."> normais (ex.: /personagem.html) funcionem corretamente
+        document.querySelectorAll('[data-section]').forEach(el => {
+            el.addEventListener('click', (e) => {
                 e.preventDefault();
-                const btn = e.currentTarget;
-                const section = btn.getAttribute('data-section');
+                const section = el.getAttribute('data-section');
                 if (section) this.showSection(section);
                 // Fechar menu após navegar (mobile)
                 this.closeMobileSidebar();
@@ -146,16 +146,20 @@ class NarutoGame {
         // Modal de diálogo
         const closeDialog = document.getElementById('closeDialog');
         const dialogModal = document.getElementById('dialogModal');
-        
-        closeDialog.addEventListener('click', () => {
-            this.closeDialog();
-        });
 
-        dialogModal.addEventListener('click', (e) => {
-            if (e.target === dialogModal) {
+        if (closeDialog) {
+            closeDialog.addEventListener('click', () => {
                 this.closeDialog();
-            }
-        });
+            });
+        }
+
+        if (dialogModal) {
+            dialogModal.addEventListener('click', (e) => {
+                if (e.target === dialogModal) {
+                    this.closeDialog();
+                }
+            });
+        }
 
         // Salvar perfil (mantém habilidades)
         const saveProfile = document.getElementById('saveProfile');
@@ -589,4 +593,4 @@ console.log('gameCommands.addXP(100) - Adicionar XP');
 console.log('gameCommands.levelUp() - Subir de nível');
 console.log('gameCommands.resetGame() - Resetar jogo');
 console.log('gameCommands.toggleTheme() - Alternar tema');
-console.log('gameCommands.showSection("perfil") - Ir para seção');
+console.log('gameCommands.showSection("vila") - Ir para seção Vila (use /personagem.html para editar personagem)');

@@ -65,7 +65,8 @@
 
 /* Selects na aba de perfil */
 /* Naruto: usa fundo branco no focus para melhor leitura */
-.naruto-theme #perfil select:focus {
+.naruto-theme #perfil select:focus,
+.naruto-theme .personagem-page select:focus {
     background: #fff !important;
     color: #111 !important;
     border-color: #fb923c !important;
@@ -125,12 +126,14 @@
 
 
 /* Corrige cor das letras do select de vila e elemento no tema akatsuki */
-.akatsuki-theme #perfil select {
+.akatsuki-theme #perfil select,
+.akatsuki-theme .personagem-page select {
     color: #fff !important;
 }
 
 /* Akatsuki: fundo branco no focus para contraste */
-.akatsuki-theme #perfil select:focus {
+.akatsuki-theme #perfil select:focus,
+.akatsuki-theme .personagem-page select:focus {
     background: #fff !important;
     color: #111 !important;
     border-color: #ff4444 !important;
@@ -301,6 +304,30 @@
     border-radius: 1px;
 }
 
+/* Esconder underline ativo quando estamos na página personagem (navegação usa links reais) */
+.personagem-page .nav-link.active::after,
+.personagem-page a.nav-link::after {
+    display: none !important;
+}
+
+/* Container de habilidades quadrado e responsivo */
+.personagem-page .skills-container,
+#personagem .skills-container {
+    width: 100%;
+    /* Em telas maiores, forçamos uma forma mais quadrada */
+    aspect-ratio: 1 / 0.7; /* levemente retangular para caber conteúdo */
+    max-height: 75vh;
+    min-height: 320px;
+    overflow: auto;
+}
+
+@media (min-width: 1024px) {
+    .personagem-page .skills-container {
+        aspect-ratio: 1 / 1; /* quadrado em desktop */
+        max-width: 900px;
+    }
+}
+
 /* Efeitos de transição suaves */
 .section {
     transition: all 0.5s ease-in-out;
@@ -331,8 +358,17 @@
     left: 0;
     height: 100%;
     width: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-    animation: shimmer 2s infinite;
+        /* shimmer removed for cleaner look */
+        display: none;
+}
+
+/* Remover qualquer animação/pulso nas barras de habilidade específicas */
+#ninjutsuBar,
+#taijutsuBar,
+#genjutsuBar {
+    animation: none !important;
+    transition: none !important;
+    box-shadow: none !important;
 }
 
 @keyframes shimmer {
@@ -443,6 +479,31 @@ button:active::before {
 
 ::-webkit-scrollbar-thumb:hover {
     background: rgba(251, 146, 60, 0.7);
+}
+
+/* Layout para a seção personagem: posicionar o card à direita em desktop */
+#personagem .personagem-layout {
+    display: block; /* padrão para mobile/smaller screens */
+}
+
+@media (min-width: 1024px) {
+    /* Aplica tanto para a seção SPA (#personagem) quanto para a página estática (.personagem-page) */
+    #personagem .personagem-layout,
+    .personagem-page .personagem-layout {
+        display: grid;
+        grid-template-columns: 1fr 340px; /* conteúdo à esquerda + card de habilidades fixo à direita */
+        gap: 1.5rem;
+        align-items: start;
+    }
+
+    #personagem .skills-card-right,
+    .personagem-page .skills-card-right {
+        width: 340px !important;
+        max-width: 340px !important;
+        aspect-ratio: 1 / 1 !important;
+        max-height: none !important;
+        padding: 1rem !important;
+    }
 }
 
 /* Efeito de loading */

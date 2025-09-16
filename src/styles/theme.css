@@ -73,7 +73,8 @@
 
 /* Selects na aba de perfil */
 /* Naruto: usa fundo branco no focus para melhor leitura */
-.naruto-theme #perfil select:focus {
+.naruto-theme #perfil select:focus,
+.naruto-theme .personagem-page select:focus {
     background: #fff !important;
     color: #111 !important;
     border-color: #fb923c !important;
@@ -150,12 +151,14 @@
 
 
 /* Corrige cor das letras do select de vila e elemento no tema akatsuki */
-.akatsuki-theme #perfil select {
+.akatsuki-theme #perfil select,
+.akatsuki-theme .personagem-page select {
     color: #fff !important;
 }
 
 /* Akatsuki: fundo branco no focus para contraste */
-.akatsuki-theme #perfil select:focus {
+.akatsuki-theme #perfil select:focus,
+.akatsuki-theme .personagem-page select:focus {
     background: #fff !important;
     color: #111 !important;
     border-color: #ff4444 !important;
@@ -350,14 +353,9 @@
 }
 
 .skill-bar::after {
+    /* shimmer removed: keep pseudo-element hidden to avoid overlay/effects */
     content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-    animation: shimmer 2s infinite;
+    display: none !important;
 }
 
 @keyframes shimmer {
@@ -557,6 +555,30 @@ button:active::before {
 
 .ninja-badge:hover::before {
     left: 100%;
+}
+
+/* Layout do card de habilidades para a seção/página Personagem */
+.personagem-page .personagem-layout {
+    display: block;
+}
+
+@media (min-width: 1024px) {
+    .personagem-page .personagem-layout,
+    #personagem .personagem-layout {
+        display: grid;
+        grid-template-columns: 1fr 340px;
+        gap: 1.5rem;
+        align-items: start;
+    }
+
+    .personagem-page .skills-card-right,
+    #personagem .skills-card-right {
+        width: 340px !important;
+        max-width: 340px !important;
+        aspect-ratio: 1 / 1 !important;
+        max-height: none !important;
+        padding: 1rem !important;
+    }
 }
 
 } /* fim @layer components */
