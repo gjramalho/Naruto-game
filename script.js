@@ -8,8 +8,9 @@ class NarutoGame {
             level: 1,
             xp: 0,
             maxXp: 100,
-            village: 'folha',
-            element: 'fogo',
+            village: 'Indefinido',
+            element: 'Indefinido',
+            chakra: 100,
             skills: {
                 ninjutsu: 5,
                 taijutsu: 3,
@@ -80,6 +81,8 @@ class NarutoGame {
             const user = users.find(u => u.nickname === nickname);
             const el = document.getElementById('sidebarPlayerName');
             if (user && el) el.textContent = `@${user.nickname}`;
+            // Sincronizar nickname do player com o login salvo
+            if (nickname) this.player.name = nickname;
         } catch {}
         
         // Adicionar efeitos de partículas
@@ -154,11 +157,13 @@ class NarutoGame {
             }
         });
 
-        // Salvar perfil
+        // Salvar perfil (mantém habilidades)
         const saveProfile = document.getElementById('saveProfile');
-        saveProfile.addEventListener('click', () => {
-            this.savePlayerProfile();
-        });
+        if (saveProfile) {
+            saveProfile.addEventListener('click', () => {
+                this.savePlayerProfile();
+            });
+        }
 
         // Trocar personagem: limpa escolha e vai para login (seleção acontece lá)
         const changeChar = document.getElementById('changeCharacterBtn');
@@ -169,18 +174,7 @@ class NarutoGame {
             });
         }
 
-        // Inputs do perfil
-        document.getElementById('playerName').addEventListener('input', (e) => {
-            this.player.name = e.target.value;
-        });
-
-        document.getElementById('playerVillage').addEventListener('change', (e) => {
-            this.player.village = e.target.value;
-        });
-
-        document.getElementById('playerElement').addEventListener('change', (e) => {
-            this.player.element = e.target.value;
-        });
+        // OBS: inputs de nome/vila/elemento foram movidos para o painel 'Status do Ninja' na Vila.
 
         // Atalhos de teclado
         document.addEventListener('keydown', (e) => {
@@ -200,6 +194,8 @@ class NarutoGame {
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') this.closeMobileSidebar();
         });
+
+        // Vila/Elemento são definidos durante o cadastro; edição inline removida.
     } 
 
     // Mostra uma seção por vez e marca item de menu ativo
@@ -336,6 +332,11 @@ class NarutoGame {
         const levelElement = document.getElementById('playerLevel');
         const xpElement = document.getElementById('playerXP');
         const xpBar = document.getElementById('xpBar');
+        const nickEl = document.getElementById('statusNickname');
+        const villageEl = document.getElementById('statusVillage');
+        const elementEl = document.getElementById('statusElement');
+        const chakraEl = document.getElementById('statusChakra');
+        const chakraBar = document.getElementById('chakraBar');
 
         if (levelElement) levelElement.textContent = this.player.level;
         if (xpElement) xpElement.textContent = `${this.player.xp}/${this.player.maxXp}`;
@@ -343,13 +344,26 @@ class NarutoGame {
             const percentage = (this.player.xp / this.player.maxXp) * 100;
             xpBar.style.width = `${percentage}%`;
         }
+
+        // Status panel
+        if (nickEl) nickEl.textContent = this.player.name || (localStorage.getItem('narutoLoggedNickname') || 'Jogador');
+        if (villageEl) villageEl.textContent = this.player.village || 'Indefinido';
+        if (elementEl) elementEl.textContent = this.player.element || 'Indefinido';
+        if (chakraEl) chakraEl.textContent = this.player.chakra != null ? this.player.chakra : 100;
+        if (chakraBar) {
+            const pct = Math.max(0, Math.min(100, (this.player.chakra / 100) * 100));
+            chakraBar.style.width = `${pct}%`;
+        }
     }
 
     updateProfileDisplay() {
-        // Atualizar campos do perfil
-        document.getElementById('playerName').value = this.player.name;
-        document.getElementById('playerVillage').value = this.player.village;
-        document.getElementById('playerElement').value = this.player.element;
+        // Atualizar campos do perfil (checar existência — inputs básicos podem ter sido movidos)
+        const playerNameEl = document.getElementById('playerName');
+        const playerVillageEl = document.getElementById('playerVillage');
+        const playerElementEl = document.getElementById('playerElement');
+        if (playerNameEl) playerNameEl.value = this.player.name || '';
+        if (playerVillageEl) playerVillageEl.value = this.player.village || 'Indefinido';
+        if (playerElementEl) playerElementEl.value = this.player.element || 'Indefinido';
 
         // Atualizar habilidades
         Object.keys(this.player.skills).forEach(skill => {
@@ -472,7 +486,7 @@ class NarutoGame {
     // Carrega dados e aplica tema salvo
     loadPlayerData() {
         const savedData = localStorage.getItem('narutoGameData');
-        
+
         if (savedData) {
             try {
                 const gameData = JSON.parse(savedData);
@@ -483,6 +497,9 @@ class NarutoGame {
                 console.error('❌ Erro ao carregar dados salvos:', error);
             }
         }
+
+        // Garantir defaults do gameData (caso campos novos estejam ausentes)
+        this.ensureGameDataDefaults();
 
         // Carregar tema salvo
         const savedTheme = localStorage.getItem('narutoGameTheme');
@@ -499,6 +516,24 @@ class NarutoGame {
             body.classList.add('naruto-theme');
             if (themeIcon) themeIcon.textContent = '🌙';
         }
+    }
+
+    ensureGameDataDefaults() {
+        // nickname do login se presente
+        const loginNick = localStorage.getItem('narutoLoggedNickname');
+        if (loginNick) this.player.name = this.player.name || loginNick;
+
+        // Defaults
+        if (this.player.village == null) this.player.village = 'Indefinido';
+        if (this.player.element == null) this.player.element = 'Indefinido';
+        if (this.player.chakra == null) this.player.chakra = 100;
+        if (this.player.level == null) this.player.level = 1;
+        if (this.player.xp == null) this.player.xp = 0;
+        if (this.player.maxXp == null) this.player.maxXp = 100;
+        if (this.player.skills == null) this.player.skills = { ninjutsu: 1, taijutsu: 1, genjutsu: 1 };
+
+        // Salvar caso algo tenha sido preenchido
+        this.savePlayerData();
     }
 
     // Método para resetar o jogo (útil para desenvolvimento)

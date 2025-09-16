@@ -161,6 +161,18 @@
                     <h3 class="text-white font-bold text-xl mb-4">Status do Ninja</h3>
                     <div class="space-y-3">
                         <div class="flex justify-between text-blue-100">
+                            <span>Nome</span>
+                            <span class="text-white font-semibold" id="statusNickname">Jogador</span>
+                        </div>
+                        <div class="flex justify-between text-blue-100">
+                            <span>Vila</span>
+                            <span class="text-white font-semibold" id="statusVillage">Indefinido</span>
+                        </div>
+                        <div class="flex justify-between text-blue-100">
+                            <span>Elemento</span>
+                            <span class="text-white font-semibold" id="statusElement">Indefinido</span>
+                        </div>
+                        <div class="flex justify-between text-blue-100">
                             <span>Nível</span>
                             <span class="text-white font-semibold" id="playerLevel">1</span>
                         </div>
@@ -172,7 +184,14 @@
                         </div>
                     </div>
 
-                    <div class="mt-6">
+                    <div class="mt-4">
+                        <div class="flex justify-between text-blue-100 mb-2">
+                            <span>Chakra</span>
+                            <span class="text-white font-semibold" id="statusChakra">100</span>
+                        </div>
+                        <div class="w-full bg-gray-700 rounded-full h-2 mb-4">
+                            <div id="chakraBar" class="bg-blue-400 h-2 rounded-full" style="width:100%"></div>
+                        </div>
                         <button class="w-full bg-white/10 hover:bg-white/20 text-white font-semibold py-2 rounded-lg transition" onclick="window.narutoGame && window.narutoGame.startMission('Treino Diário')">
                             📋 Missão do Dia
                         </button>
@@ -187,35 +206,9 @@
                 <h2 class="text-4xl font-bold text-white mb-8 text-center">Perfil do Ninja</h2>
                 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <!-- Informações do Personagem -->
-                    <div class="bg-white/10 backdrop-blur-md rounded-xl p-6">
-                        <h3 class="text-white font-bold text-xl mb-4">Informações Básicas</h3>
-                        <div class="space-y-4">
-                            <div>
-                                <label class="block text-blue-100 mb-2">Nome do Ninja:</label>
-                                <input type="text" id="playerName" class="w-full bg-white/20 text-white rounded-lg px-4 py-2 border border-white/30 focus:border-orange-400 focus:outline-none" placeholder="Digite seu nome ninja">
-                            </div>
-                            <div>
-                                <label class="block text-blue-100 mb-2">Vila:</label>
-                                <select id="playerVillage" class="w-full bg-white/20 text-white rounded-lg px-4 py-2 border border-white/30 focus:border-orange-400 focus:outline-none">
-                                    <option value="folha">Vila da Folha</option>
-                                    <option value="areia">Vila da Areia</option>
-                                    <option value="nevoa">Vila da Névoa</option>
-                                    <option value="pedra">Vila da Pedra</option>
-                                    <option value="nuvem">Vila da Nuvem</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-blue-100 mb-2">Elemento Principal:</label>
-                                <select id="playerElement" class="w-full bg-white/20 text-white rounded-lg px-4 py-2 border border-white/30 focus:border-orange-400 focus:outline-none">
-                                    <option value="fogo">Fogo 🔥</option>
-                                    <option value="agua">Água 💧</option>
-                                    <option value="terra">Terra 🌍</option>
-                                    <option value="vento">Vento 💨</option>
-                                    <option value="raio">Raio ⚡</option>
-                                </select>
-                            </div>
-                        </div>
+                    <!-- Informações Básicas agora estão no painel 'Status do Ninja' na Vila -->
+                    <div class="bg-white/5 backdrop-blur-md rounded-xl p-6 flex items-center justify-center text-blue-100">
+                        <p>Campos básicos movidos para <strong>Vila → Status do Ninja</strong>.</p>
                     </div>
 
                     <!-- Habilidades -->
@@ -319,6 +312,8 @@
             </button>
         </div>
     </div>
+
+    <!-- Edit modal removed: vila/elemento definidos no cadastro -->
 
     <script type="module" src="/script.js"></script>
     <script type="module" src="/main.js"></script>

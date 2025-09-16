@@ -104,6 +104,30 @@ document.addEventListener('DOMContentLoaded', () => {
       passInput?.classList.remove('input-error');
     } catch {}
 
+    // Garantir que o game data exista (com defaults) após login
+    try {
+      if (!localStorage.getItem('narutoGameData')) {
+        const nicknameToUse = result.user?.nickname || localStorage.getItem('narutoLoggedNickname') || 'Jogador';
+        const defaultData = {
+          player: {
+            name: nicknameToUse,
+            level: 1,
+            xp: 0,
+            maxXp: 100,
+            village: 'Indefinido',
+            element: 'Indefinido',
+            chakra: 100,
+            skills: { ninjutsu: 1, taijutsu: 1, genjutsu: 1 }
+          },
+          isDarkMode: localStorage.getItem('narutoGameTheme') === 'dark',
+          currentSection: 'vila'
+        };
+        localStorage.setItem('narutoGameData', JSON.stringify(defaultData));
+      }
+    } catch (e) {
+      console.warn('Falha ao inicializar narutoGameData no login:', e);
+    }
+
     // Prosseguir para seleção de personagem
     const loginCard = document.querySelector('.glass-card-dark');
     if (loginCard) loginCard.classList.add('hidden');

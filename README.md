@@ -25,307 +25,149 @@ Um jogo web interativo inspirado no universo de Naruto, desenvolvido com HTML5, 
 ### Pré-requisitos
 - Node.js 18+ (ou 20+ recomendado)
   - Verifique: `node -v`
-- npm (vem com o Node). Alternativas: `pnpm` ou `yarn` (opcional)
+# 🍃 Vila da Folha — Naruto-game
 
-Notas do ambiente:
-- Projeto em ESM (package.json com `"type": "module"`). Arquivos de config (`postcss.config.js`, `tailwind.config.js`, `vite.config.js`) usam `export default`.
-- Tailwind roda via PostCSS/Vite. O processamento dos `@tailwind` acontece somente quando você usa `npm run dev` ou `npm run build`.
-- Globs do Tailwind foram otimizados para não varrer `node_modules/` e `dist/`.
+Protótipo cliente-only: jogo web em HTML/CSS/JS usando Vite + Tailwind. Feito para aprendizado e demonstração. Não use este código como sistema de autenticação/segurança em produção.
 
-### Passo a passo (dev)
-1) Instalar dependências
+Resumo (rápido)
+- SPA estática servida pelo Vite
+- Tema persistente (localStorage) — `naruto-theme` / `akatsuki-theme`
+- Autenticação local (LocalStorage) com hash de senha (WebCrypto) — apenas protótipo
+- Sidebar: fixa em desktop; off-canvas (mobile) com botão hambúrguer e overlay
+
+Funcionalidades principais
+- Navegação: Vila (NPCs), Perfil, Créditos
+- NPCs interativos com diálogos, XP e progressão
+- Perfil personalizável (nickname, vila, elemento)
+- Sistema de progresso (XP / níveis / skills)
+- Notificações visuais e efeitos (glass, transições)
+
+Pré-requisitos
+- Node.js 18+ (ou 20+ recomendado)
+- npm (ou pnpm/yarn)
+
+Instalação e execução
+1) Instale dependências
 
 ```powershell
-# Windows PowerShell
 npm install
 ```
 
-2) Iniciar o servidor de desenvolvimento (Vite)
+2) Desenvolvimento (dev server)
 
 ```powershell
 npm run dev
 ```
 
-3) Acessar no navegador a URL exibida (ex.: http://localhost:5173)
-
-Rotas principais (abra direto no navegador):
-- Login (início): `/login.html`
-- Cadastro: `/register.html`
-- Index (redireciona para login se não estiver logado): `/` ou `/index.html`
-
-Observação sobre o fluxo: o site inicia no Login. O Index redireciona para `login.html` quando não há sessão ativa ("lembrar de mim" via localStorage ou sessão via sessionStorage).
-
-4) Alterar a porta (opcional)
+3) Build e preview (produção)
 
 ```powershell
-npm run dev -- --port 5175
+npm run build
+npm run preview
 ```
 
-Scripts disponíveis
+Scripts principais (package.json)
+- `dev`: inicia Vite para desenvolvimento
+- `build`: cria `dist/` otimizado
+- `preview`: serve `dist/` para testes
+- `clean`: remove `dist/` (Windows/Unix compatível via rimraf)
+
+Arquivos-chave
+- `index.html` — aplicação principal (carrega `script.js`)
+- `login.html`, `register.html` — autenticação e seleção de personagem
+- `script.js` — lógica principal (navegação, HUD, NPCs, notificações)
+- `auth.js` — cadastro/login local (hash client-side)
+- `login.js`, `register.js` — validações e fluxo de autenticação
+- `src/styles/input.css`, `src/styles/theme.css` — Tailwind entry + temas
+
+Autenticação (importante)
+- Usuários são salvos em `localStorage.narutoUsers` como array de objetos: `{ email, nickname, passwordHash }`.
+- Login aceita `email` ou `nickname` + `password`.
+- Chaves usadas pelo app:
+  - `localStorage.narutoGameLogged = 'true'` (quando "Lembrar de mim" ativo)
+  - `sessionStorage.narutoSession = 'true'` (login temporário por aba)
+  - `localStorage.narutoLoggedNickname` (nickname do usuário logado)
+  - `localStorage.narutoGameTheme` (`light` | `dark`)
+- Rate-limit: 3 tentativas falhas → bloqueio por 30s (controle via localStorage). 
+- Aviso: hashing é feito no cliente (WebCrypto SHA-256). Isso é suficiente para protótipo, mas não substitui autenticação segura com backend.
+
+Status do Ninja (localStorage)
+- Dados principais do jogador são salvos em `localStorage.narutoGameData` com a estrutura:
 
 ```json
 {
-  "dev": "vite --port 5173",
-  "build": "vite build",
-  "preview": "vite preview --port 5174 --open",
-  "clean": "rimraf dist || rmdir /s /q dist"
+  "player": {
+    "name": "nick",
+    "level": 1,
+    "xp": 0,
+    "maxXp": 100,
+    "village": "Indefinido",
+    "element": "Indefinido",
+    "chakra": 100,
+    "skills": { "ninjutsu": 1, "taijutsu": 1, "genjutsu": 1 }
+  },
+  "isDarkMode": false,
+  "currentSection": "vila"
 }
 ```
 
-### Build de produção
+-- O painel "Status do Ninja" está em `index.html` → seção Vila. Ele exibe: nickname (do login), vila, elemento, nível, XP e chakra. A vila e o elemento são definidos no cadastro (register) — atualmente não editáveis inline.
 
-```powershell
-npm run build        # gera dist/
-npm run preview      # serve dist/ e abre o navegador (http://localhost:5174)
-```
+Theming e UI
+- Tema armazenado em `localStorage.narutoGameTheme` e aplicado ao `<body>` como `naruto-theme` ou `akatsuki-theme`.
+- Sidebar e elementos UI são estilizados por `src/styles/theme.css` e utilitários Tailwind.
+- Mobile: existe botão hambúrguer (`#mobileMenuBtn`) que abre o menu off-canvas e um overlay (`#sidebarOverlay`).
 
-Não abra os arquivos HTML direto do sistema de arquivos quando usar Tailwind: o CSS com `@tailwind` é processado pelo Vite. Use `npm run dev` (durante o desenvolvimento) ou `npm run preview` (após o build) para ver os estilos corretamente.
-
-## 🎯 Como Jogar
-
-### Navegação
-- **Vila**: Página principal com NPCs interativos
-- **Perfil**: Customize seu ninja e veja suas habilidades
-- **Créditos**: Informações sobre o desenvolvimento
-
-### Interações
-- **Clique nos NPCs** para conversar e ganhar XP
-- **Configure seu perfil** na seção Perfil
-- **Use atalhos de teclado**:
-  - `1` - Vila
-  - `2` - Perfil  
-  - `3` - Créditos
-  - `Ctrl+T` - Alternar tema
-  - `ESC` - Fechar diálogos
-
-### Sistema de Progressão
-- **Ganhe XP** interagindo com personagens
-- **Suba de nível** automaticamente
-- **Desenvolva habilidades**: Ninjutsu, Taijutsu, Genjutsu
-- **Personalize** seu ninja com diferentes vilas e elementos
-
-## 🛠️ Tecnologias Utilizadas
-
-- **HTML5**: Estrutura semântica
-- **CSS3**: Animações e efeitos visuais
-- **JavaScript ES6+**: Lógica do jogo e interatividade
-- **Vite 5**: Dev server e build
-- **TailwindCSS (via PostCSS + Autoprefixer)**: utilitários processados no build/dev
-<!-- Ícones agora são emojis/SVG locais; Font Awesome removido -->
-- **LocalStorage API**: Persistência de dados
-
-## 🔐 Autenticação (client-side)
-
-- Contas são salvas localmente em `localStorage.narutoUsers` com `email`, `nickname` e `passwordHash` (SHA-256 via WebCrypto; fallback simples se indisponível).
-- Login aceita email OU nome ninja como identificador + senha.
-- "Lembrar de mim":
-  - Marcado: define `localStorage.narutoGameLogged = true` (permanece logado entre sessões).
-  - Desmarcado: usa `sessionStorage.narutoSession = true` (apenas a aba/sessão atual).
-- Rate-limit: após 3 tentativas de login falhas, bloqueia por 30s com mensagem de contagem regressiva.
-- Realce de erros: campos de login com erro são destacados.
-- Pós-cadastro: redireciona para `login.html?registered=1` e exibe aviso “Conta criada! Faça login para continuar.”
-- Sidebar exibe `@nickname` do usuário logado e traz ações: "Trocar Personagem" e "Sair".
-
-Aviso: este modelo é adequado para protótipos e uso local. Para produção, utilize um backend/autenticação segura.
-
-### Dica para VS Code
-- Recomenda-se instalar a extensão: Tailwind CSS IntelliSense (`bradlc.vscode-tailwindcss`).
-- O workspace já contém `.vscode/settings.json` para o editor não marcar `@tailwind` como erro.
-
-## 📱 Responsividade
-
-O jogo é totalmente responsivo e funciona em:
-- **Desktop** (1920x1080+)
-- **Tablet** (768px+)
-- **Mobile** (320px+)
-
-## 🎨 Temas
-
-O tema é alternado entre:
-
-- Modo Claro (naruto-theme): gradientes vibrantes inspirados na Vila da Folha
-- Modo Escuro (akatsuki-theme): gradientes escuros com vermelho (Akatsuki)
-
-Persistência: a escolha é salva em `localStorage.narutoGameTheme` como `light` ou `dark`.
-
-Páginas com toggle integrado: `index.html`, `login.html` e `register.html` (botão flutuante no canto superior direito). O ícone alterna entre `🌙` (modo Naruto/claro) e `☀️` (modo Akatsuki/escuro).
-
-Observação: o tema agora controla o fundo de toda a página (não só o menu). Removemos gradientes fixos das páginas para que `naruto-theme`/`akatsuki-theme` façam efeito global, inclusive na sidebar.
-
-## 🎮 Comandos de Console (Desenvolvimento)
-
-Abra o console do navegador (F12) e use:
-
-```javascript
+Comandos úteis (console do navegador)
+```js
 // Adicionar XP
-gameCommands.addXP(100);
+gameCommands.addXP(100)
 
 // Subir de nível
-gameCommands.levelUp();
+gameCommands.levelUp()
 
-// Resetar jogo
-gameCommands.resetGame();
+// Resetar jogo (limpa progresso salvo)
+gameCommands.resetGame()
 
 // Alternar tema
-gameCommands.toggleTheme();
+gameCommands.toggleTheme()
 
 // Navegar para seção
-gameCommands.showSection('perfil');
+gameCommands.showSection('perfil')
 ```
 
-## 🔧 Estrutura do Projeto
+Problemas comuns & soluções rápidas
+- "CSS quebrado": rode o dev server (`npm run dev`) — Tailwind é processado pelo Vite.
+- Porta ocupada: `npm run dev -- --port 5175`.
+- Tema não persiste: verifique permissões de LocalStorage e se `id="body"` existe.
+- Reset manual (console):
+```js
+localStorage.removeItem('narutoGameData')
+localStorage.removeItem('narutoGameTheme')
+localStorage.removeItem('narutoGameLogged')
+localStorage.removeItem('narutoLoggedNickname')
+```
 
+Estrutura do projeto (resumida)
 ```
 Naruto-game/
-├── index.html          # Página principal
-├── login.html          # Login + seleção de personagem
-├── register.html       # Cadastro
-├── src/
-│   └── styles/
-│       ├── input.css   # Entrada do Tailwind
-│       └── theme.css   # Estilos customizados
-├── script.js           # Lógica do jogo
-├── login.js            # Lógica do login e seleção
-├── login.css           # Estilos do login
-├── register.js         # Validação do cadastro e tema
-├── register.css        # Estilos do cadastro
-├── auth.js             # Utilitários de autenticação (CRUD local + hash de senha)
-└── README.md           # Documentação
-
-Arquivos de configuração (ESM): `vite.config.js`, `tailwind.config.js`, `postcss.config.js`.
-
-## 🧪 Dicas & Troubleshooting
-
-- CSS não carrega / página “quebrada” ao abrir arquivo .html diretamente:
-  - Use `npm run dev` (desenvolvimento) ou `npm run preview` após `npm run build`.
-  - Motivo: Tailwind `@tailwind` é processado pelo Vite/PostCSS.
-
-- Porta em uso (EADDRINUSE):
-  - Rode com outra porta: `npm run dev -- --port 5175`.
-
-- Build antiga aparecendo no navegador:
-  - Faça um hard-reload (Ctrl+F5) ou limpe o cache.
-  - Opcional: `npm run clean` para remover `dist/` antes de um novo build.
-
-- Tema não persiste entre páginas:
-  - Verifique se o navegador permite LocalStorage.
-  - Chave usada: `narutoGameTheme` (valores `light` | `dark`).
-  - Confirme que o `<body>` possui o `id="body"` nas páginas e que as classes `naruto-theme`/`akatsuki-theme` não estão sendo sobrescritas por estilos antigos.
-
-- Bloqueio de login (rate-limit):
-  - Após 3 falhas, o login é bloqueado por 30s. Aguarde a contagem (mensagem na tela) ou limpe as chaves:
-    - `localStorage.removeItem('narutoLoginAttempts')`
-    - `localStorage.removeItem('narutoLoginBlockedUntil')`
-
-- Sessão vs Lembrar de mim:
-  - "Lembrar de mim": `localStorage.narutoGameLogged = true`
-  - Sessão atual: `sessionStorage.narutoSession = true`
-  - Para sair: use o botão "Sair" (limpa sessão e login), ou limpe manualmente:
-    - `localStorage.removeItem('narutoGameLogged')`
-    - `sessionStorage.removeItem('narutoSession')`
-    - `localStorage.removeItem('narutoLoggedNickname')`
-
-- Fluxo não avança do index:
-  - O index verifica `narutoGameRegistered` e `narutoGameLogged`. Se estiverem ausentes, redireciona para cadastro/login.
-  - Acesse diretamente `/register.html` para iniciar do começo.
-
-## 🧹 Resetar estado (dev)
-
-Você pode limpar o progresso/estado durante o desenvolvimento:
-
-No console do navegador (F12) na tela principal:
-```js
-gameCommands.resetGame();
+├─ index.html
+├─ login.html
+├─ register.html
+├─ script.js
+├─ auth.js
+├─ login.js
+├─ register.js
+├─ src/styles/
+│  ├─ input.css
+│  └─ theme.css
+└─ README.md
 ```
 
-Ou removendo chaves específicas no console (qualquer página):
-```js
-localStorage.removeItem('narutoGameData');
-localStorage.removeItem('narutoGameTheme');
-localStorage.removeItem('narutoGameRegistered');
-localStorage.removeItem('narutoGameLogged');
-localStorage.removeItem('narutoGameCharacter');
-```
-```
+Observações finais
+- Projeto focado em prototipagem visual e UX; código e autenticação são client-side.
+- Remova dados de LocalStorage quando compartilhar ou publicar exemplos públicos.
 
-## 🎯 Funcionalidades Futuras (Expansões Possíveis)
+Licença & créditos
+- Projeto fan-made; conteúdo do anime pertence aos detentores originais.
 
-- **Sistema de Missões**: Tarefas para completar
-- **Batalhas**: Sistema de combate por turnos
-- **Inventário**: Itens e equipamentos ninja
-- **Múltiplas Vilas**: Explorar outras vilas ninja
-- **Multiplayer**: Interação entre jogadores
-- **Sons e Música**: Trilha sonora do anime
-- **Mais NPCs**: Personagens adicionais
-- **Sistema de Clãs**: Uchiha, Hyuga, etc.
-
-## 🏆 Conquistas Implementáveis
-
-- **Primeiro Diálogo**: Converse com um NPC
-- **Nível 10**: Alcance o nível 10
-- **Mestre das Habilidades**: Maximize uma habilidade
-- **Explorador**: Visite todas as seções
-- **Ninja Dedicado**: Jogue por 30 minutos
-
-## 🎨 Personalização
-
-### Adicionar Novos NPCs
-1. Edite o objeto `npcs` em `script.js`
-2. Adicione o card HTML correspondente
-3. Configure diálogos e características
-
-### Modificar Temas
-1. Temas/cores: `src/styles/theme.css`
-2. Tailwind (purge/scan): `tailwind.config.js`
-3. Toggle e persistência: `script.js`, `login.js`, `register.js`
-
-### Adicionar Habilidades
-1. Expanda o objeto `skills` no player
-2. Adicione elementos HTML para exibição
-3. Implemente lógica de progressão
-
-## 📄 Licença
-
-Este é um projeto fan-made sem fins lucrativos, criado para fins educacionais e de entretenimento.
-
-**Naruto** é uma criação de **Masashi Kishimoto**, publicado pela Shueisha e animado pelo Studio Pierrot.
-
-## 👨‍💻 Desenvolvimento
-
-Desenvolvido por **Gjramalho** com foco em:
-- **UX/UI Design**
-- **Programação Orientada a Objetos**
-- **Responsividade**
-- **Performance**
-- **Acessibilidade**
-
-## 🐛 Relatório de Bugs
-
-Se encontrar algum problema:
-1. Verifique o console do navegador (F12)
-2. Teste em modo incógnito
-3. Limpe o localStorage: `gameCommands.resetGame()`
-
-## 🌟 Contribuições
-
-Este projeto serve como base para aprendizado e pode ser expandido com:
-- Novas funcionalidades
-- Melhorias visuais
-- Otimizações de performance
-- Correções de bugs
-
----
-
-**Que a Vontade do Fogo esteja com você! 🔥**
-
-## 📝 Changelog (2025-09-06)
-
-- Tema passou a controlar o fundo de todas as páginas; removidos gradientes fixos do Login/Register.
-- Sidebar esquerda fixa, sem menu superior, com estilos que mudam conforme o tema.
-- Toggle de tema unificado nas três páginas, com ícone sincronizado (🌙/☀️) e persistência em `localStorage`.
-- Build com Vite/Tailwind estável; configs em ESM e ordem correta de imports (`input.css` importa `theme.css` antes dos `@tailwind`).
-- Autenticação local: `auth.js` com hash de senha e cadastro/login persistentes.
-- Login inicia o fluxo; Index redireciona ao Login quando não logado.
-- "Lembrar de mim" (localStorage) ou sessão da aba (sessionStorage).
-- Rate-limit no login (3 falhas -> 30s de bloqueio) e destaque de campos com erro.
-- Sidebar mostra `@nickname` e botões "Trocar Personagem" e "Sair".

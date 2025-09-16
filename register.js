@@ -95,6 +95,28 @@ document.addEventListener('DOMContentLoaded', () => {
     success.querySelector('span').textContent = 'Cadastro concluído. Redirecionando para login...';
     success.classList.remove('hidden');
     localStorage.setItem('narutoGameRegistered', 'true');
+    // Salvar nickname criado para facilitar fluxo pós-login
+    try {
+      localStorage.setItem('narutoLoggedNickname', nickname);
+      // Inicializar dados do jogo básicos
+      const defaultData = {
+        player: {
+          name: nickname,
+          level: 1,
+          xp: 0,
+          maxXp: 100,
+          village: 'Indefinido',
+          element: 'Indefinido',
+          chakra: 100,
+          skills: { ninjutsu: 1, taijutsu: 1, genjutsu: 1 }
+        },
+        isDarkMode: false,
+        currentSection: 'vila'
+      };
+      localStorage.setItem('narutoGameData', JSON.stringify(defaultData));
+    } catch (e) {
+      console.warn('Falha ao inicializar dados do jogo:', e);
+    }
     setTimeout(() => {
       window.location.href = 'login.html?registered=1';
     }, 1200);
