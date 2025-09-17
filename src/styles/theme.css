@@ -579,6 +579,38 @@ button:active::before {
         max-height: none !important;
         padding: 1rem !important;
     }
+
+    /* Estilos para o card Bolsa de Itens */
+    .personagem-page .bag-card,
+    #personagem .bag-card {
+        width: 100%;
+        max-width: none;
+        min-height: 340px;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .personagem-page .bag-grid,
+    #personagem .bag-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.5rem;
+        flex: 1 1 auto;
+    }
+
+    .personagem-page .bag-slot,
+    #personagem .bag-slot {
+        background: rgba(255,255,255,0.06);
+        border: 1px dashed rgba(255,255,255,0.08);
+        border-radius: 8px;
+        min-height: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 0.9rem;
+    }
 }
 
 } /* fim @layer components */

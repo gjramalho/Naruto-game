@@ -547,13 +547,13 @@ class NarutoGame {
         location.reload();
     }
 
-    // Logoff: limpa estado de login/personagem e volta ao login
+        // Logoff: limpa estado de login/personagem e redireciona ao login
     logout() {
         try {
             localStorage.removeItem('narutoGameLogged');
             localStorage.removeItem('narutoGameCharacter');
             sessionStorage.removeItem('narutoSession');
-            // Mantém o tema e progresso, a não ser que queira limpar tudo:
+            // Mantém o tema e progresso por padrão. Para limpar tudo, remova 'narutoGameData'.
             // localStorage.removeItem('narutoGameData');
         } catch (e) {
             console.warn('Falha ao limpar localStorage no logoff:', e);

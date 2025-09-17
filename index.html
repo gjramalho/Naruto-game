@@ -192,11 +192,25 @@
                 <!-- Seção Personagem (SPA) -->
                 <section id="personagem" class="min-h-screen px-4 py-10 section hidden">
                     <div class="max-w-6xl mx-auto w-full">
-                        <h2 class="text-4xl font-bold text-white mb-8 text-center">Personagem</h2>
-                                    <div class="personagem-layout">
-                                        <div><!-- espaço para conteúdo futuro à esquerda (atualmente vazio) --></div>
-                                        <!-- Habilidades (apenas) -->
-                                        <div class="glass-card bg-white/10 backdrop-blur-md rounded-xl p-6 skills-container skills-card-right flex flex-col justify-between">
+                                                                            <!-- Removido título principal para exibir apenas os cards -->
+                                                                            <div class="personagem-layout">
+                                                                                    <!-- Bolsa de Itens (esquerda) -->
+                                                                                    <div class="glass-card bg-white/8 backdrop-blur-md rounded-xl p-6 bag-card">
+                                                                                            <h3 class="text-white font-bold text-xl mb-4">Bolsa de Itens</h3>
+                                                                                            <div class="bag-grid">
+                                                                                                <div class="bag-slot" data-slot="1"></div>
+                                                                                                <div class="bag-slot" data-slot="2"></div>
+                                                                                                <div class="bag-slot" data-slot="3"></div>
+                                                                                                <div class="bag-slot" data-slot="4"></div>
+                                                                                                <div class="bag-slot" data-slot="5"></div>
+                                                                                                <div class="bag-slot" data-slot="6"></div>
+                                                                                                <div class="bag-slot" data-slot="7"></div>
+                                                                                                <div class="bag-slot" data-slot="8"></div>
+                                                                                                <div class="bag-slot" data-slot="9"></div>
+                                                                                            </div>
+                                                                                    </div>
+                                                                                    <!-- Habilidades (direita) -->
+                                                                                    <div class="glass-card bg-white/10 backdrop-blur-md rounded-xl p-6 skills-container skills-card-right flex flex-col justify-between">
                                 <h3 class="text-white font-bold text-xl mb-4">Habilidades</h3>
                                 <div class="space-y-4">
                                     <div class="skill-item">
