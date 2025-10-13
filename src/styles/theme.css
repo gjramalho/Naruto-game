@@ -600,16 +600,41 @@ button:active::before {
     }
 
     .personagem-page .bag-slot,
-    #personagem .bag-slot {
-        background: rgba(255,255,255,0.06);
-        border: 1px dashed rgba(255,255,255,0.08);
-        border-radius: 8px;
-        min-height: 64px;
+    #personagem .bag-slot,
+    .rpg-bag-grid .bag-slot {
+        background: rgba(255,255,255,0.10);
+        border: 2px solid rgba(255,255,255,0.18);
+        border-radius: 12px;
+        min-width: 96px;
+        min-height: 96px;
+        max-width: 96px;
+        max-height: 96px;
         display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
         color: #fff;
-        font-size: 0.9rem;
+        font-size: 1.1rem;
+        box-shadow: 0 2px 8px 0 rgba(0,0,0,0.18);
+        transition: border 0.2s, box-shadow 0.2s;
+    }
+    .rpg-bag-grid {
+        gap: 1.5rem !important;
+        justify-content: center;
+    }
+    .bag-slot:hover {
+        border-color: #ff9800;
+        box-shadow: 0 4px 16px 0 rgba(255,152,0,0.18);
+        background: rgba(255,152,0,0.10);
+    }
+    .bag-slot .item-icon {
+        font-size: 2.2rem;
+        margin-bottom: 0.3rem;
+    }
+    .bag-slot .item-label {
+        font-size: 0.95rem;
+        color: #ffd580;
+        font-weight: 500;
     }
 }
 
