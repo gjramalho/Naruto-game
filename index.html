@@ -193,24 +193,39 @@
                 <section id="personagem" class="min-h-screen px-4 py-10 section hidden">
                     <div class="max-w-6xl mx-auto w-full">
                                                                             <!-- Removido título principal para exibir apenas os cards -->
-                                                                            <div class="personagem-layout">
-                                                                                    <!-- Bolsa de Itens (esquerda) -->
-                                                                                    <div class="glass-card bg-white/8 backdrop-blur-md rounded-xl p-6 bag-card">
-                                                                                            <h3 class="text-white font-bold text-xl mb-4">Bolsa de Itens</h3>
-                                                                                            <div class="bag-grid">
-                                                                                                <div class="bag-slot" data-slot="1"></div>
-                                                                                                <div class="bag-slot" data-slot="2"></div>
-                                                                                                <div class="bag-slot" data-slot="3"></div>
-                                                                                                <div class="bag-slot" data-slot="4"></div>
-                                                                                                <div class="bag-slot" data-slot="5"></div>
-                                                                                                <div class="bag-slot" data-slot="6"></div>
-                                                                                                <div class="bag-slot" data-slot="7"></div>
-                                                                                                <div class="bag-slot" data-slot="8"></div>
-                                                                                                <div class="bag-slot" data-slot="9"></div>
-                                                                                            </div>
-                                                                                    </div>
-                                                                                    <!-- Habilidades (direita) -->
-                                                                                    <div class="glass-card bg-white/10 backdrop-blur-md rounded-xl p-6 skills-container skills-card-right flex flex-col justify-between">
+                        <div class="personagem-layout grid grid-cols-1 lg:grid-cols-3 gap-8">
+                            <!-- Bolsa RPG (coluna 1) -->
+                            <div class="glass-card bg-white/8 backdrop-blur-md rounded-xl p-6 flex flex-col items-center rpg-bag-card">
+                                <h3 class="text-white font-bold text-xl mb-4">Bolsa de Itens</h3>
+                                <div class="rpg-bag-grid grid grid-cols-4 grid-rows-3 gap-2 mb-4">
+                                    <div class="bag-slot" data-slot="1"><span class="item-icon">🗡️</span><span class="item-label">Faca</span></div>
+                                    <div class="bag-slot" data-slot="2"><span class="item-icon">🧪</span><span class="item-label">Poção</span></div>
+                                    <div class="bag-slot" data-slot="3"><span class="item-icon">🪖</span><span class="item-label">Elmo</span></div>
+                                    <div class="bag-slot" data-slot="4"><span class="item-icon">👢</span><span class="item-label">Bota</span></div>
+                                    <div class="bag-slot" data-slot="5"></div>
+                                    <div class="bag-slot" data-slot="6"></div>
+                                    <div class="bag-slot" data-slot="7"></div>
+                                    <div class="bag-slot" data-slot="8"></div>
+                                    <div class="bag-slot" data-slot="9"></div>
+                                    <div class="bag-slot" data-slot="10"></div>
+                                    <div class="bag-slot" data-slot="11"></div>
+                                    <div class="bag-slot" data-slot="12"></div>
+                                </div>
+                            </div>
+                            <!-- Equipamentos RPG (coluna 2) -->
+                            <div class="glass-card bg-white/8 backdrop-blur-md rounded-xl p-6 flex flex-col items-center rpg-equip-card">
+                                <h3 class="text-white font-bold text-xl mb-4">Equipamentos</h3>
+                                <div class="rpg-equip-list flex flex-col gap-3 w-full">
+                                    <div class="equip-slot flex items-center gap-2" data-equip="head"><span class="item-icon">🪖</span><span class="item-label">Cabeça</span></div>
+                                    <div class="equip-slot flex items-center gap-2" data-equip="body"><span class="item-icon">🛡️</span><span class="item-label">Corpo</span></div>
+                                    <div class="equip-slot flex items-center gap-2" data-equip="hand-left"><span class="item-icon">🗡️</span><span class="item-label">Mão Esquerda</span></div>
+                                    <div class="equip-slot flex items-center gap-2" data-equip="hand-right"><span class="item-icon">🧪</span><span class="item-label">Mão Direita</span></div>
+                                    <div class="equip-slot flex items-center gap-2" data-equip="legs"><span class="item-icon">👖</span><span class="item-label">Pernas</span></div>
+                                    <div class="equip-slot flex items-center gap-2" data-equip="feet"><span class="item-icon">👢</span><span class="item-label">Pés</span></div>
+                                </div>
+                            </div>
+                            <!-- Habilidades (coluna 3) -->
+                            <div class="glass-card bg-white/10 backdrop-blur-md rounded-xl p-6 skills-container skills-card-right flex flex-col justify-between">
                                 <h3 class="text-white font-bold text-xl mb-4">Habilidades</h3>
                                 <div class="space-y-4">
                                     <div class="skill-item">
