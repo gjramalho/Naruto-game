@@ -1,9 +1,39 @@
 services:
+  # ============================================================
+  # FRONTEND (Vite + Nginx)
+  # ============================================================
+  frontend:
+    image: node:20-alpine
+    container_name: naruto_frontend
+    working_dir: /app
+    volumes:
+      - .:/app
+    ports:
+      - "5173:5173"
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    networks:
+      - naruto_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5173"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /tmp
+
+  # ============================================================
+  # BACKEND (SQL Server)
+  # ============================================================
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: naruto_sqlserver
     env_file:
-      - .env
+      - backend/.env
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=${SA_PASSWORD}
@@ -21,19 +51,20 @@ services:
       retries: 10
       start_period: 60s
 
+  # ============================================================
+  # BACKEND (API .NET)
+  # ============================================================
   api:
     build:
-      context: .
+      context: backend
       dockerfile: Dockerfile
       args:
         - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT:-Development}
     container_name: naruto_api
     env_file:
-      - .env
+      - backend/.env
     environment:
       - ASPNETCORE_URLS=http://+:80
-      # ⚠️ AVISO: TrustServerCertificate=True é aceitável apenas para desenvolvimento local
-      # Para produção, use certificados SSL válidos e remova TrustServerCertificate
       - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=NarutoGame;User Id=sa;Password=${SA_PASSWORD};TrustServerCertificate=True;MultipleActiveResultSets=true
       - Jwt__Secret=${JWT_SECRET}
       - Jwt__Issuer=NarutoGameAPI
