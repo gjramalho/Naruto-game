@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/NarutoGame.API/NarutoGame.API.csproj" />
+    <Project Path="src/NarutoGame.Application/NarutoGame.Application.csproj" />
+    <Project Path="src/NarutoGame.Core/NarutoGame.Core.csproj" />
+    <Project Path="src/NarutoGame.Infrastructure/NarutoGame.Infrastructure.csproj" />
+    <Project Path="src/NarutoGame.Tests/NarutoGame.Tests.csproj" />
+  </Folder>
+</Solution>

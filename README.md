@@ -1,138 +1,244 @@
 # 🍃 Vila da Folha — Jogo Web Naruto
 
-Protótipo cliente (front-end) desenvolvido com HTML5, CSS3, JavaScript e Tailwind CSS. O projeto é educacional e serve como demonstração de interfaces e mecânicas simples de jogo.
+Jogo web educacional com tema Naruto, agora com **backend em C#/.NET 8** e banco de dados SQL Server.
 
-## Aviso de segurança
-
-Este projeto armazena usuários e dados no navegador (localStorage) e realiza hashing do lado do cliente apenas para fins de demonstração. Não utilize este código para autenticação, armazenamento de credenciais ou qualquer solução em produção.
-
-Antes de publicar ou demonstrar, recomenda-se limpar o localStorage (ver seção "Reset manual").
-
-## Recursos principais
-
-- Interface responsiva (desktop e mobile)
-- Tema claro/escuro com persistência
-- NPCs interativos com diálogos e sistema de progressão
-- Perfil personalizável (nickname, vila, elemento)
-- Sistema de XP, níveis e habilidades
-
-## Requisitos
-
-- Node.js 18+ (20+ recomendado)
-- npm (ou pnpm / yarn)
-
-## Instalação
-
-```powershell
-npm install
-```
-
-## Desenvolvimento
-
-```powershell
-npm run dev
-```
-
-## Build para produção
-
-```powershell
-npm run build
-npm run preview
-```
-
-## Arquivos principais
-
-- `index.html` — entrada da aplicação
-- `login.html`, `register.html` — fluxo de autenticação local
-- `script.js` — lógica principal da aplicação (navegação, UI, NPCs)
-- `auth.js` — funções de cadastro/login (hash local)
-- `src/styles/input.css`, `src/styles/theme.css` — configurações e tema do Tailwind
-
-## Autenticação e armazenamento (importante)
-
-- Usuários são armazenados em `localStorage.narutoUsers` como um array de objetos: `{ email, nickname, passwordHash }`.
-- Flags e chaves usadas pela aplicação:
-  - `localStorage.narutoGameLogged` = 'true'
-  - `sessionStorage.narutoSession` = 'true'
-  - `localStorage.narutoLoggedNickname`
-  - `localStorage.narutoGameTheme` (`light` | `dark`)
-
-### Exemplo do estado salvo
-
-```json
-{
-  "player": {
-    "name": "nick",
-    "level": 1,
-    "xp": 0,
-    "maxXp": 100,
-    "village": "Indefinido",
-    "element": "Indefinido",
-    "chakra": 100,
-    "skills": { "ninjutsu": 1, "taijutsu": 1, "genjutsu": 1 }
-  },
-  "isDarkMode": false,
-  "currentSection": "vila"
-}
-```
-
-## Comandos úteis (console do navegador)
-
-```js
-// Adicionar XP
-gameCommands.addXP(100)
-
-// Subir de nível
-gameCommands.levelUp()
-
-// Resetar jogo (limpa progresso salvo)
-gameCommands.resetGame()
-
-// Alternar tema
-gameCommands.toggleTheme()
-
-// Navegar para seção
-gameCommands.showSection('perfil')
-```
-
-## Problemas comuns e soluções rápidas
-
-- CSS sem aplicar: rode o servidor de desenvolvimento (`npm run dev`) — Tailwind é processado via Vite.
-- Porta ocupada: `npm run dev -- --port 5175`.
-- Tema não persiste: verifique permissões de localStorage e se o elemento `id="body"` está presente.
-
-## Reset manual (console)
-
-Use estes comandos no console do navegador para limpar dados locais de demonstração:
-
-```js
-localStorage.removeItem('narutoGameData')
-localStorage.removeItem('narutoGameTheme')
-localStorage.removeItem('narutoGameLogged')
-localStorage.removeItem('narutoLoggedNickname')
-localStorage.removeItem('narutoUsers')
-```
-
-## Estrutura do projeto (resumida)
+## 🏗️ Arquitetura do Projeto
 
 ```
 Naruto-game/
-├─ index.html
-├─ login.html
-├─ register.html
-├─ script.js
-├─ auth.js
-├─ login.js
-├─ register.js
-├─ src/styles/
-│  ├─ input.css
-│  └─ theme.css
-└─ README.md
+├── 📁 frontend/                    # Frontend JavaScript (HTML/CSS/JS + Tailwind)
+├── 📁 backend/                    # Backend C# (.NET 8)
+│   ├── 📁 src/
+│   │   ├── NarutoGame.Core/       # Entidades e interfaces
+│   │   ├── NarutoGame.Infrastructure/ # EF Core + Repositórios
+│   │   ├── NarutoGame.Application/   # Services + DTOs
+│   │   └── NarutoGame.API/        # Controllers + JWT
+│   ├── docker-compose.yml         # Orquestração Docker
+│   └── Dockerfile                 # Build da API
+└── 📁 plans/                     # Documentação
 ```
 
-## Licença e créditos
+## 🚀 Tecnologias
 
-- Projeto fan-made; conteúdo do anime pertence aos respectivos detentores dos direitos autorais.
+### Backend
+- **.NET 8** + **ASP.NET Core Web API**
+- **Entity Framework Core** + **SQL Server 2022**
+- **JWT Bearer** Authentication
+- **AutoMapper** + **FluentValidation**
+- **Serilog** para logging
+- **Swagger/OpenAPI** para documentação
 
-Ao publicar o repositório, recomenda-se adicionar um arquivo `LICENSE` (por exemplo, MIT) e certificar-se de que nenhuma credencial foi comitada.
+### Frontend
+- HTML5 + CSS3 + **Tailwind CSS**
+- **JavaScript** ES6+
+- **Vite** como build tool
 
+### DevOps
+- **Docker** + **Docker Compose**
+
+## ⚡ Como Executar
+
+### 1. Com Docker (Recomendado)
+
+```powershell
+# Navegue até a pasta backend
+cd backend
+
+# Inicie os containers (SQL Server + API)
+docker-compose up -d
+
+# A API estará disponível em: http://localhost:5000
+# Swagger: http://localhost:5000/swagger
+```
+
+### 2. Desenvolvimento Local
+
+**Pré-requisitos:**
+- .NET 8 SDK
+- Node.js 18+
+- SQL Server (ou SQL Server Express)
+
+```powershell
+# Backend
+cd backend/src/NarutoGame.API
+dotnet run
+
+# Frontend (em outro terminal)
+cd frontend
+npm install
+npm run dev
+```
+
+## 📡 Endpoints da API
+
+### Autenticação
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| POST | `/api/auth/register` | Criar nova conta |
+| POST | `/api/auth/login` | Autenticar e receber JWT |
+
+### Jogador (Requer JWT)
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| GET | `/api/player/profile` | Perfil do jogador |
+| PUT | `/api/player/profile` | Atualizar perfil |
+| POST | `/api/player/xp` | Adicionar XP |
+| PUT | `/api/player/skills` | Atualizar habilidades |
+
+### Jogo
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| GET | `/api/game/npcs` | Listar NPCs |
+| GET | `/api/game/npcs/{key}` | Detalhes de NPC |
+| GET | `/api/game/missions` | Listar missões |
+| POST | `/api/game/missions/{id}/complete` | Completar missão |
+
+### Sistema
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| GET | `/health` | Health check |
+
+## 🔐 Autenticação JWT
+
+O token JWT deve ser enviado no header:
+```
+Authorization: Bearer {token}
+```
+
+Exemplo de login:
+```json
+POST /api/auth/login
+{
+  "identifier": "usuario@email.com",
+  "password": "SuaSenh@123"
+}
+```
+
+Resposta:
+```json
+{
+  "success": true,
+  "token": "eyJhbGciOiJIUzI1NiIs...",
+  "expiresAt": "2024-01-01T12:00:00Z",
+  "user": {
+    "id": "guid",
+    "email": "usuario@email.com",
+    "nickname": "usuario"
+  }
+}
+```
+
+## 🛡️ Rate Limiting
+
+Para proteger contra ataques de força bruta, a API implementa rate limiting:
+
+| Endpoint | Limite | Janela |
+|----------|--------|--------|
+| `/api/auth/*` (login, register) | 5 requisições | 15 minutos |
+| Demais endpoints | 100 requisições | 1 minuto |
+
+**Resposta quando bloqueado (HTTP 429):**
+```json
+{
+  "error": "Too many requests. Please try again later."
+}
+```
+
+## 🗄️ Estrutura do Banco de Dados
+
+### Tabelas
+- **Users** — Conta do jogador (email, senha hash)
+- **Players** — Dados do personagem (nível, XP, vila, elemento)
+- **PlayerStats** — Habilidades (ninjutsu, taijutsu, genjutsu)
+- **Npcs** — Personagens não jogáveis
+- **NpcDialogues** — Diálogos dos NPCs
+- **Missions** — Missões disponíveis
+- **PlayerMissions** — Missões completadas pelo jogador
+
+## 🔧 Variáveis de Ambiente
+
+**IMPORTANTE:** Nunca comite arquivos `.env` com segredos reais. Use o arquivo `.env.example` como referência.
+
+```bash
+# Backend: Copie o arquivo de exemplo
+cd backend
+cp .env.example .env
+
+# Edite o .env com suas configurações:
+# - SA_PASSWORD: Senha do SQL Server
+# - JWT_SECRET: Chave secreta para JWT (mínimo 32 caracteres)
+```
+
+### Configurações necessárias
+
+```env
+# Connection String do SQL Server
+# ⚠️ IMPORTANTE: Use senhas fortes diferentes em produção!
+SA_PASSWORD=SuaSenhaForte@123
+
+# Configurações JWT
+# ⚠️ IMPORTANTE: Mínimo 32 caracteres!
+JWT_SECRET=SuaChaveSecretaDeNoMinimo32Caracteres!
+
+# Ambiente
+ASPNETCORE_ENVIRONMENT=Development
+```
+
+### Desenvolvimento Local (sem Docker)
+
+Para desenvolvimento local, as variáveis podem ser configuradas no `appsettings.Development.json` ou como variáveis de ambiente do sistema.
+
+**⚠️ Aviso:** O `appsettings.json` agora contém apenas placeholders. Todos os segredos devem vir de variáveis de ambiente ou do `appsettings.Development.json`.
+
+## 📁 Estrutura de Pastas (Backend)
+
+```
+backend/src/
+├── NarutoGame.Core/
+│   ├── Entities/       # User, Player, Npc, Mission, etc.
+│   ├── Enums/          # ElementType, VillageType, SkillType
+│   └── Interfaces/     # IUserRepository, IPlayerRepository, etc.
+│
+├── NarutoGame.Infrastructure/
+│   ├── Data/           # DbContext, DbInitializer
+│   └── Repositories/   # Implementações dos repositórios
+│
+├── NarutoGame.Application/
+│   ├── DTOs/           # Data Transfer Objects
+│   ├── Services/        # AuthService, PlayerService, GameService
+│   └── Mappings/       # AutoMapper profiles
+│
+└── NarutoGame.API/
+    ├── Controllers/     # AuthController, PlayerController, etc.
+    ├── Configuration/   # Extensions
+    └── Middleware/      # Exception handling
+```
+
+## 🧪 Testes
+
+```powershell
+# Executar testes unitários
+cd backend
+dotnet test
+```
+
+## 📚 Recursos
+
+- Interface responsiva (desktop e mobile)
+- Tema claro/escuro com persistência
+- NPCs interativos com diálogos
+- Sistema de XP, níveis e habilidades
+- Missões diárias e rank-up
+
+## ⚠️ Aviso de Segurança
+
+Este é um projeto **educacional**. Para produção:
+- Implemente HTTPS
+- Use variáveis de ambiente para secrets
+- Configure rate limiting
+- Implemente refresh tokens
+- Adicione validação de input server-side
+
+---
+
+🍃 *"Aquele que quebra as regras é escória, mas aquele que abandona seus amigos é pior que escória."* — Naruto Uzumaki

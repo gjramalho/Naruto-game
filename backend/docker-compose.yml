@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: naruto_sqlserver
+    env_file:
+      - .env
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=${SA_PASSWORD}
+      - MSSQL_PID=Express
+    ports:
+      - "1433:1433"
+    volumes:
+      - sql_data:/var/opt/mssql
+    networks:
+      - naruto_network
+    healthcheck:
+      test: /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "$${SA_PASSWORD}" -Q "SELECT 1" || exit 1
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 30s
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT:-Development}
+    container_name: naruto_api
+    env_file:
+      - .env
+    environment:
+      - ASPNETCORE_URLS=http://+:80
+      # ⚠️ AVISO: TrustServerCertificate=True é aceitável apenas para desenvolvimento local
+      # Para produção, use certificados SSL válidos e remova TrustServerCertificate
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=NarutoGame;User Id=sa;Password=${SA_PASSWORD};TrustServerCertificate=True;MultipleActiveResultSets=true
+      - Jwt__Secret=${JWT_SECRET}
+      - Jwt__Issuer=NarutoGameAPI
+      - Jwt__Audience=NarutoGame
+    ports:
+      - "5000:80"
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    networks:
+      - naruto_network
+    restart: unless-stopped
+
+volumes:
+  sql_data:
+    driver: local
+
+networks:
+  naruto_network:
+    driver: bridge

@@ -1,0 +1,6 @@
+@NarutoGame.API_HostAddress = http://localhost:5090
+
+GET {{NarutoGame.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

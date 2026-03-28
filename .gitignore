@@ -26,3 +26,45 @@ Thumbs.db
 
 # other
 *.log
+
+# Planning documents (moved to wiki)
+plans/
+
+# ============================================
+# .NET
+# ============================================
+# Build results
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+
+# NuGet
+*.nupkg
+.nuget/
+packages/
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# Visual Studio
+.vs/
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Docker
+.docker/
+
+# appsettings with secrets
+appsettings.*.local.json
+appsettings.local.json
+
+# appsettings de desenvolvimento (podem conter segredos)
+src/**/appsettings.Development.json
+backend/**/appsettings.Development.json
+backend/appsettings.Development.json
