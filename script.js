@@ -304,7 +304,7 @@ class NarutoGame {
         modal.classList.remove('flex');
     }
 
-    gainXP(amount) {
+    async gainXP(amount) {
         this.player.xp += amount;
         
         // Verificar level up
@@ -313,6 +313,16 @@ class NarutoGame {
         }
         
         this.updatePlayerDisplay();
+        
+        // Adicionar XP via API se autenticado
+        if (window.narutoAuth && window.narutoAuth.isAuthenticated()) {
+            try {
+                await window.narutoAuth.addXp(amount);
+            } catch (error) {
+                console.warn('Erro ao adicionar XP via API:', error);
+            }
+        }
+        
         this.savePlayerData();
     }
 
@@ -477,18 +487,76 @@ class NarutoGame {
         }
     }
 
-    savePlayerData() {
+    async savePlayerData() {
         const gameData = {
             player: this.player,
             isDarkMode: this.isDarkMode,
             currentSection: this.currentSection
         };
         
+        // Salvar no localStorage para compatibilidade
         localStorage.setItem('narutoGameData', JSON.stringify(gameData));
+        
+        // Salvar no backend se autenticado
+        if (window.narutoAuth && window.narutoAuth.isAuthenticated()) {
+            try {
+                await window.narutoAuth.updatePlayerProfile({
+                    nickname: this.player.name,
+                    village: this.player.village,
+                    element: this.player.element,
+                    level: this.player.level,
+                    xp: this.player.xp,
+                    chakra: this.player.chakra
+                });
+                
+                // Salvar habilidades separadamente
+                await window.narutoAuth.updateSkills({
+                    ninjutsu: this.player.skills.ninjutsu,
+                    taijutsu: this.player.skills.taijutsu,
+                    genjutsu: this.player.skills.genjutsu
+                });
+            } catch (error) {
+                console.warn('Erro ao salvar dados no backend:', error);
+            }
+        }
     }
 
     // Carrega dados e aplica tema salvo
-    loadPlayerData() {
+    async loadPlayerData() {
+        // Tentar carregar do backend se autenticado
+        if (window.narutoAuth && window.narutoAuth.isAuthenticated()) {
+            try {
+                const profileResult = await window.narutoAuth.getPlayerProfile();
+                if (profileResult.success && profileResult.data) {
+                    const profile = profileResult.data;
+                    this.player = {
+                        ...this.player,
+                        name: profile.nickname || this.player.name,
+                        level: profile.level || this.player.level,
+                        xp: profile.xp || this.player.xp,
+                        village: profile.village || this.player.village,
+                        element: profile.element || this.player.element,
+                        chakra: profile.chakra != null ? profile.chakra : this.player.chakra
+                    };
+                    
+                    // Carregar habilidades se disponíveis
+                    if (profile.skills) {
+                        this.player.skills = {
+                            ninjutsu: profile.skills.ninjutsu || this.player.skills.ninjutsu,
+                            taijutsu: profile.skills.taijutsu || this.player.skills.taijutsu,
+                            genjutsu: profile.skills.genjutsu || this.player.skills.genjutsu
+                        };
+                    }
+                    
+                    console.log('✅ Dados carregados do backend');
+                    return;
+                }
+            } catch (error) {
+                console.warn('Erro ao carregar dados do backend, usando localStorage:', error);
+            }
+        }
+        
+        // Fallback para localStorage
         const savedData = localStorage.getItem('narutoGameData');
 
         if (savedData) {

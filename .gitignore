@@ -12,6 +12,9 @@ dist/
 .env.local
 .env.*.local
 
+# Explicitly ignore backend .env (safety)
+backend/.env
+
 # logs
 npm-debug.log*
 yarn-debug.log*

@@ -1,49 +1,121 @@
-// Auth util: armazenamento local de usuários com hash de senha
+// Auth util: integração com backend API
 (function(){
-  function getUsers(){
-    try{ return JSON.parse(localStorage.getItem('narutoUsers')||'[]'); }catch{ return []; }
+  // Verifica se a API está disponível
+  function isApiAvailable() {
+    return typeof window.apiService !== 'undefined';
   }
-  function saveUsers(users){
-    localStorage.setItem('narutoUsers', JSON.stringify(users));
-  }
-  async function hashPassword(password){
-    try{
-      if (window.crypto && window.crypto.subtle) {
-        const enc = new TextEncoder();
-        const buf = await crypto.subtle.digest('SHA-256', enc.encode(password));
-        const arr = Array.from(new Uint8Array(buf));
-        return arr.map(b=>b.toString(16).padStart(2,'0')).join('');
-      }
-    }catch{}
-    // Fallback simples (não seguro) se SubtleCrypto não estiver disponível
-    try { return btoa(unescape(encodeURIComponent(password))); } catch { return password; }
-  }
-  function findUserByIdentifier(identifier){
-    const id = (identifier||'').trim().toLowerCase();
-    return getUsers().find(u => u.nickname.toLowerCase()===id || u.email.toLowerCase()===id);
-  }
-  async function createUser({email, nickname, password}){
-    const users = getUsers();
-    const emailKey = (email||'').trim().toLowerCase();
-    const nickKey = (nickname||'').trim().toLowerCase();
-    if (users.some(u => u.email.toLowerCase()===emailKey)){
-      return { ok:false, error:'E-mail já cadastrado.' };
+
+  // Registra um novo usuário via API
+  async function createUser({email, nickname, password, village, element}) {
+    if (!isApiAvailable()) {
+      return { ok: false, error: 'Serviço de API não disponível. Verifique se o backend está rodando.' };
     }
-    if (users.some(u => u.nickname.toLowerCase()===nickKey)){
-      return { ok:false, error:'Nome ninja já existe.' };
+
+    // Gerar username a partir do nickname
+    const username = nickname.toLowerCase().replace(/\s+/g, '_');
+
+    const result = await window.apiService.register({
+      username,
+      email,
+      password,
+      nickname,
+      village: village || 'Indefinido',
+      element: element || 'Indefinido'
+    });
+
+    if (!result.success) {
+      return { ok: false, error: result.error };
     }
-    const passwordHash = await hashPassword(password);
-    const newUser = { email: emailKey, nickname: nickKey, passwordHash, createdAt: Date.now() };
-    users.push(newUser);
-    saveUsers(users);
-    return { ok:true, user:newUser };
+
+    return { ok: true, user: result.data };
   }
-  async function verifyLogin(identifier, password){
-    const user = findUserByIdentifier(identifier);
-    if (!user) return { ok:false, error:'Conta não encontrada. Crie sua conta.' };
-    const hash = await hashPassword(password);
-    if (user.passwordHash !== hash) return { ok:false, error:'Senha incorreta.' };
-    return { ok:true, user };
+
+  // Autentica usuário via API
+  async function verifyLogin(identifier, password) {
+    if (!isApiAvailable()) {
+      return { ok: false, error: 'Serviço de API não disponível. Verifique se o backend está rodando.' };
+    }
+
+    const result = await window.apiService.login({
+      username: identifier,
+      password
+    });
+
+    if (!result.success) {
+      return { ok: false, error: result.error };
+    }
+
+    // Salvar dados do usuário no localStorage para compatibilidade
+    if (result.data.user) {
+      localStorage.setItem('narutoLoggedNickname', result.data.user.nickname || identifier);
+    }
+
+    return { ok: true, user: result.data.user, token: result.data.token };
   }
-  window.narutoAuth = { getUsers, createUser, verifyLogin };
+
+  // Verifica se o usuário está autenticado
+  function isAuthenticated() {
+    if (!isApiAvailable()) {
+      return localStorage.getItem('narutoGameLogged') === 'true' || sessionStorage.getItem('narutoSession') === 'true';
+    }
+    return window.apiService.isAuthenticated();
+  }
+
+  // Realiza logout
+  function logout() {
+    if (isApiAvailable()) {
+      window.apiService.logout();
+    }
+    localStorage.removeItem('narutoGameLogged');
+    sessionStorage.removeItem('narutoSession');
+    localStorage.removeItem('narutoLoggedNickname');
+  }
+
+  // Obtém perfil do jogador via API
+  async function getPlayerProfile() {
+    if (!isApiAvailable()) {
+      return { ok: false, error: 'Serviço de API não disponível.' };
+    }
+
+    return await window.apiService.getPlayerProfile();
+  }
+
+  // Atualiza perfil do jogador via API
+  async function updatePlayerProfile(profileData) {
+    if (!isApiAvailable()) {
+      return { ok: false, error: 'Serviço de API não disponível.' };
+    }
+
+    return await window.apiService.updatePlayerProfile(profileData);
+  }
+
+  // Adiciona XP via API
+  async function addXp(amount) {
+    if (!isApiAvailable()) {
+      return { ok: false, error: 'Serviço de API não disponível.' };
+    }
+
+    return await window.apiService.addXp(amount);
+  }
+
+  // Atualiza habilidades via API
+  async function updateSkills(skills) {
+    if (!isApiAvailable()) {
+      return { ok: false, error: 'Serviço de API não disponível.' };
+    }
+
+    return await window.apiService.updateSkills(skills);
+  }
+
+  // Exportar funções globalmente
+  window.narutoAuth = {
+    createUser,
+    verifyLogin,
+    isAuthenticated,
+    logout,
+    getPlayerProfile,
+    updatePlayerProfile,
+    addXp,
+    updateSkills
+  };
 })();

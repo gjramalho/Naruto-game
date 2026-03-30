@@ -15,17 +15,18 @@ RUN dotnet restore src/NarutoGame.API/NarutoGame.API.csproj
 COPY src/ src/
 
 # Build the application
-WORKDIR /src/NarutoGame.API
-RUN dotnet build NarutoGame.API.csproj -c Release -o /app/build
+RUN dotnet build src/NarutoGame.API/NarutoGame.API.csproj -c Release -o /app/build
 
 # Publish stage
 FROM build AS publish
-WORKDIR /src/NarutoGame.API
-RUN dotnet publish NarutoGame.API.csproj -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish src/NarutoGame.API/NarutoGame.API.csproj -c Release -o /app/publish /p:UseAppHost=false
 
 # Runtime stage
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
+
+# Install curl for healthcheck
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 
 # Create non-root user for security
 RUN adduser --disabled-password --gecos "" appuser && chown -R appuser /app
