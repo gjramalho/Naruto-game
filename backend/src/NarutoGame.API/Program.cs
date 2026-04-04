@@ -35,7 +35,11 @@ builder.Services.AddControllers()
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 if (string.IsNullOrWhiteSpace(connectionString))
 {
-    throw new InvalidOperationException("ConnectionStrings__DefaultConnection não está configurado. Defina a variável de ambiente ou configuração.");
+    if (!builder.Environment.IsDevelopment())
+    {
+        throw new InvalidOperationException("ConnectionStrings__DefaultConnection não está configurado. Defina a variável de ambiente ou configuração.");
+    }
+    connectionString = "Server=sqlserver;Database=NarutoGame;User Id=sa;Password=SenhaForte123!;TrustServerCertificate=True;MultipleActiveResultSets=true";
 }
 
 builder.Services.AddDbContext<NarutoGameDbContext>(options =>
@@ -170,11 +174,18 @@ builder.Services.AddScoped<GameService>();
     });
 
 // Configure JWT Authentication
-var jwtSecret = builder.Configuration["Jwt:Secret"] 
-    ?? throw new InvalidOperationException("Jwt:Secret não está configurado. Defina a variável de ambiente ou configuração.");
+var jwtSecret = builder.Configuration["Jwt:Secret"];
+if (string.IsNullOrWhiteSpace(jwtSecret))
+{
+    if (!builder.Environment.IsDevelopment())
+    {
+        throw new InvalidOperationException("Jwt:Secret não está configurado. Defina a variável de ambiente ou configuração.");
+    }
+    jwtSecret = "chave-secreta-muito-longa-para-garantir-seguranca-do-jwt-token-com-64-caracteres!";
+}
 
 // Validate JWT secret length (minimum 32 characters for security)
-if (jwtSecret.Length < 32)
+if (jwtSecret.Length < 32 && !builder.Environment.IsDevelopment())
 {
     throw new InvalidOperationException("Jwt:Secret deve ter pelo menos 32 caracteres para garantir segurança adequada.");
 }
@@ -265,6 +276,30 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseSerilogRequestLogging();
+
+app.UseExceptionHandler(appError =>
+{
+    appError.Run(async context =>
+    {
+        context.Response.ContentType = "application/json";
+        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+        
+        var contextFeature = context.Features.Get<Microsoft.AspNetCore.Diagnostics.IExceptionHandlerFeature>();
+        if (contextFeature != null)
+        {
+            Log.Error(contextFeature.Error, "Unhandled exception occurred");
+            
+            var errorResponse = new
+            {
+                error = "An internal server error occurred",
+                message = builder.Environment.IsDevelopment() ? contextFeature.Error.Message : "An internal server error occurred",
+                details = builder.Environment.IsDevelopment() ? contextFeature.Error.StackTrace : null
+            };
+            
+            await context.Response.WriteAsJsonAsync(errorResponse);
+        }
+    });
+});
 
 app.UseCors("AllowFrontend");
 
