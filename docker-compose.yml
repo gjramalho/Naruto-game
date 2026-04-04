@@ -8,7 +8,7 @@ services:
     working_dir: /app
     volumes:
       - .:/app
-      - /app/node_modules
+      - node_modules:/app/node_modules
     ports:
       - "5173:5173"
     command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
@@ -16,7 +16,7 @@ services:
       - naruto_network
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:5173 || exit 1"]
+      test: ["CMD-SHELL", "wget -qO- http://localhost:5173 || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -32,12 +32,12 @@ services:
   # ============================================================
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
-    container_name: naruto_sqlserver
+    container_name: naruto-sqlserver
     env_file:
       - backend/.env
     environment:
       - ACCEPT_EULA=Y
-      - SA_PASSWORD=${SA_PASSWORD}
+      - SA_PASSWORD=${SA_PASSWORD:-SenhaForte123!}
       - MSSQL_PID=Express
     ports:
       - "1433:1433"
@@ -79,7 +79,7 @@ services:
       - naruto_network
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:80/health", "||", "exit", "1"]
+      test: ["CMD", "wget", "-qO-", "http://localhost:80/health", "||", "exit", "1"]
       interval: 30s
       timeout: 10s
       retries: 3
