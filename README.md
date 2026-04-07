@@ -157,8 +157,6 @@ Para proteger contra ataques de força bruta, a API implementa rate limiting:
 
 ## 🔧 Variáveis de Ambiente
 
-**IMPORTANTE:** Nunca comite arquivos `.env` com segredos reais. Use o arquivo `.env.example` como referência.
-
 ```bash
 # Backend: Copie o arquivo de exemplo
 cd backend
