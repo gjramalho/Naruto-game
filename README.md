@@ -140,7 +140,7 @@ Para proteger contra ataques de força bruta, a API implementa rate limiting:
 **Resposta quando bloqueado (HTTP 429):**
 ```json
 {
-  "error": "Too many requests. Please try again later."
+  "error": "Muitas requisições, tente novamente mais tarde!"
 }
 ```
 
